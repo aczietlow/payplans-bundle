@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="1.0" type="plugin" group="payplans" method="upgrade">
+    <name>PayPlans-Bundle</name>
+    <version>1.0.0.0</version>
+    <creationDate>Jan 2013</creationDate>
+    <author>Chris Zietlow</author>
+    <authorEmail>chris.zietlow@morris.com</authorEmail>
+    <authorUrl>http://morris.com</authorUrl>
+    <copyright>2013</copyright>
+    <license>GNU General Public License v2</license>
+    <description>PayPlans : Paid Membership and Subscription System for Joomla</description>
+	<files>
+		<filename plugin="bundle">bundle.php</filename>
+		<folder>bundle</folder>
+	</files>
+</extension>

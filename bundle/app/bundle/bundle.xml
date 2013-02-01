@@ -1,0 +1,18 @@
+<!--?xml version="1.0" encoding="utf-8"?-->
+<config>
+	<name>Payplan - Bundle</name>
+	<version>0.1.1</version>
+	<creationdate>Jan 2013</creationdate>
+	<author>Morris Media Network</author>
+	<authoremail>chris.zietlow@morris.com</authoremail>
+	<authorurl>http://morris.com</authorurl>
+	<copyright>2013</copyright>
+	<license>GNU General Public License v2</license>
+	<icon>bundle.png</icon>
+	<tags>bundle</tags>
+	<description>
+		Bundle was designed to integrate with payplans to allow to extend the subscription plans. It will allow for fields to be attached to the subscription
+		plans that will directly affect the price; Such as additional options to the subscriptions that increase the price of the subscription.
+	</description>
+</config>
+
