@@ -58,8 +58,11 @@ class plgPayplansBundle extends XiPlugin
 			$this->_assign('invoiceKey', $invoiceKey);
 				
 			$sub = PayplansApi::getSubscription(22);
-			$subMethods = get_class_methods($sub);
-			var_dump($subMethods);
+			
+			$params = $sub->getParams();
+			$data = $params->toArray();
+			//var_dump();
+			var_dump($data['address']);
 		}
 
 		if (($view instanceof PayplanssiteViewPayment) && $task == 'pay') {
