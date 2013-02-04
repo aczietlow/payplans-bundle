@@ -61,9 +61,29 @@ class plgPayplansBundle extends XiPlugin
 			$sub		= PayplansApi::getSubscription($subId);
 			$params		= $sub->getParams();
 			$data		= $params->toArray();
-			//$sub->setPrice(44.00);
-			$var		= JRequest::getVar('var');
-			var_dump($sub->getPrice());
+			
+			$modifier = PayplansModifier::getInstance();
+			$modifier
+			->set('message',XiText::_('Bundle Prices were applied'))
+			->set('invoice_id', $invoiceId)
+			->set('user_id', $invoice->getBuyer())
+ 			//->set('type', 'tax')
+ 			->set('amount', .50)
+// 					->getAppParam('coupon_amount', $amount)) // Discount should be negative
+// 					->set('reference', $this
+// 							->getAppParam('coupon_code', ''))
+// 							->set('percentage', $isPercentage ? true : false)
+// 							->set('frequency', $this
+// 									->getAppParam('onlyFirstRecurringDiscount', false) ? PayplansModifier::FREQUENCY_ONE_TIME : PayplansModifier::FREQUENCY_EACH_TIME);
+			
+			;
+// 			$serial = ($isPercentage === true)? PayplansModifier::PERCENT_NON_TAXABLE: PayplansModifier::FIXED_NON_TAXABLE;
+ 			var_dump($modifier);
+			// XITODO : add error checking
+			//$modifier
+			//->set('serial', $serial)
+			//->save();
+			
 				
 		}
 

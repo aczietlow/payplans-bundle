@@ -38,19 +38,29 @@ class PayplansAppBundle extends PayplansApp {
 	{
 		return true;
 	}
-	
-	//trigger update based on this event
- 	public function onPayplansSubscriptionAfterSave($prev, $new) {
- 		//$subId	= $new->getId();
- 		
- 		$params = $new->getParams()->toArray();
 
- 		if (isset($params['devices'])) {
- 			$num	= $params['devices'];
- 			$new->setPrice($new->getPrice() + ($num * 10));
- 		} 		
+	//trigger update based on this event
+	public function onPayplansSubscriptionAfterSave($prev, $new) {
+// 		$modifier = PayplansModifier::getInstance();
+// 		$modifier
+// 		->set('message',XiText::_('COM_PAYPLANS_APP_BASIC_DISCOUNT_MESSAGE'))
+// 		->set('invoice_id', $object->getId())
+// 		->set('user_id', $object->getBuyer())
+// 		->set('type', $this->getType())
+// 		->set('amount', - $this
+// 				->getAppParam('coupon_amount', $amount)) // Discount should be negative
+// 				->set('reference', $this
+// 						->getAppParam('coupon_code', ''))
+// 						->set('percentage', $isPercentage ? true : false)
+// 						->set('frequency', $this
+// 								->getAppParam('onlyFirstRecurringDiscount', false) ? PayplansModifier::FREQUENCY_ONE_TIME : PayplansModifier::FREQUENCY_EACH_TIME);
+// 		$serial = ($isPercentage === true)? PayplansModifier::PERCENT_NON_TAXABLE: PayplansModifier::FIXED_NON_TAXABLE;
+// 		// XITODO : add error checking
+// 		$modifier
+// 		->set('serial', $serial)
+// 		->save();
 	}
-	
+
 	public function onPayplansInvoiceAfterSave($prev, $new) {
 // 		$invoiceId 	= $new->getObjectId();
 // 		$order		= PayplansApi::getOrder($orderId);
@@ -60,42 +70,42 @@ class PayplansAppBundle extends PayplansApp {
 // 		$data		= $params->toArray();
 // 		$sub->setPrice(33.00);
 // 		$var = $sub->setOrder($order);
-// 		//$sub->save();
-		
-				
+// 		$sub->save();
+
+
 	}
 
 	/**
-	
+
 	Available events
-	
+
 	onPayplansPlanBeforeSave
 	onPayplansPlanAfterSave
-	
+
 	onPayplansSubscriptionBeforeSave
 	onPayplansSubscriptionAfterSave
-	
+
 	onPayplansOrderBeforeSave
 	onPayplansOrderAfterSave
-	
+
 	onPayplansPaymentBeforeSave
 	onPayplansPaymentAfterSave
-	
+
 	onPayplansAppBeforeSave
 	onPayplansAppAfterSave
-	
+
 	onPayplansUserBeforeSave
 	onPayplansUserAfterSave
-	
+
 	onPayplanswalletUpdate
-	
+
 	onPayplansInvoiceBeforeSave
 	onPayplansInvoiceAfterSave
-	
+
 	onPayplansOrderAfterSave
 	onPayplansOrderBeforeSave
-	
-	
+
+
 	Control Events : Events triggered during processing of any request
 	*/
 }
