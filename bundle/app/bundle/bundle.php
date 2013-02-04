@@ -46,7 +46,7 @@ class PayplansAppBundle extends PayplansApp {
  		
  		$params = $new->getParams();
  		$data 	= $params->toArray();
-
+		$data['name'] = 'chris';
  		if ($data['name'] == 'chris' || $data['name'] == 'Chris') {
  			$new->setPrice(11.00);
  		}
@@ -56,9 +56,19 @@ class PayplansAppBundle extends PayplansApp {
  		
 	}
 	
-// 	public function onPayplansInvoiceAfterSave($new) {
-// 		//$new->setPrice(22.00);
-// 	}
+	public function onPayplansInvoiceAfterSave($prev, $new) {
+// 		$invoiceId 	= $new->getObjectId();
+// 		$order		= PayplansApi::getOrder($orderId);
+// 		$subId		= $order->getSubscription();
+// 		$sub		= PayplansApi::getSubscription($subId);
+// 		$params		= $sub->getParams();
+// 		$data		= $params->toArray();
+// 		$sub->setPrice(33.00);
+// 		$var = $sub->setOrder($order);
+// 		//$sub->save();
+		
+				
+	}
 
 	/**
 	
@@ -88,7 +98,8 @@ class PayplansAppBundle extends PayplansApp {
 	onPayplansInvoiceAfterSave
 	
 	onPayplansOrderAfterSave
-	onPlayplansOrderBeforeSave
+	onPayplansOrderBeforeSave
+	
 	
 	Control Events : Events triggered during processing of any request
 	*/

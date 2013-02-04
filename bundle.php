@@ -11,16 +11,16 @@
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
 /**
- * Payplans Discount Plugin
+ * Payplans Bundle Plugin
  *
- * @author shyam
+ * @author Chris Zietlow
 */
 class plgPayplansBundle extends XiPlugin
 {
 
 	public function onPayplansSystemStart()
 	{
-		//add discount app path to app loader
+		//add bundle app path to app loader
 		$appPath = dirname(__FILE__).DS.'bundle'.DS.'app';
 		PayplansHelperApp::addAppsPath($appPath);
 
@@ -44,30 +44,47 @@ class plgPayplansBundle extends XiPlugin
 		//if user is not logged in then display the modified price on login page
 		if(($view instanceof PayplanssiteViewPlan) && $task == 'login')
 		{
-			$plan = $view->get('plan');
-			$status = $plan->getStatus();
-			//var_dump($status);
+
 		}
 
 		if(($view instanceof PayplanssiteViewInvoice && $task == 'confirm') || ($view instanceof PayplansadminViewInvoice && $task == 'edit')) {
 			$invoiceId 	= $view->getModel()->getId();
 			$invoice 	= PayPlansInvoice::getInstance($invoiceId);
 			$invoiceKey	= $invoice->getKey();
-				
+
 			$this->_assign('invoiceId', $invoiceId);
 			$this->_assign('invoiceKey', $invoiceKey);
+
+			$invoiceId 	= $invoice->getObjectId();
+			$order		= PayplansApi::getOrder($orderId);
+			$subId		= $order->getSubscription();
+			$sub		= PayplansApi::getSubscription($subId);
+			$params		= $sub->getParams();
+			$data		= $params->toArray();
+			//$sub->setPrice(44.00);
+			$var		= JRequest::getVar('var');
+			var_dump($sub->getPrice());
 				
-			$sub = PayplansApi::getSubscription(22);
-			
-			$params = $sub->getParams();
-			$data = $params->toArray();
-			//var_dump();
-			var_dump($data['address']);
 		}
 
 		if (($view instanceof PayplanssiteViewPayment) && $task == 'pay') {
-			$payment = $view->get('payment');
-			//var_dump($view);
+			$paymentId 	= $view->getModel()->getId();
+			$payment 	= PayplansApi::getPayment($paymentId);
+			$invoiceId	= $payment->getInvoice();
+			$invoice	= PayplansApi::getInvoice($invoiceId);
+			$orderId	= $invoice->getObjectId();
+			$order 		= PayplansApi::getOrder($orderId);
+			$sub		= $order->getSubscription();
+			$subParams	= $sub->getParams()->toArray();
+			
+			//if ($subParams['name'] == Chris) {
+				$sub->setPrice(99.00);
+				$order->set('total', 99.00);
+				$invoice->set('total', 99.00);
+				//$invoice->set($property);
+				$dump = $payment->getProperties();
+				var_dump($dump);	
+			//}
 		}
 	}
 
