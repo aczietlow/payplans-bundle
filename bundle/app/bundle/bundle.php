@@ -41,19 +41,14 @@ class PayplansAppBundle extends PayplansApp {
 	
 	//trigger update based on this event
  	public function onPayplansSubscriptionAfterSave($prev, $new) {
- 		$subId	= $new->getId();
+ 		//$subId	= $new->getId();
  		
- 		
- 		$params = $new->getParams();
- 		$data 	= $params->toArray();
-		$data['name'] = 'chris';
- 		if ($data['name'] == 'chris' || $data['name'] == 'Chris') {
- 			$new->setPrice(11.00);
- 		}
- 		else {
- 			$new->setPrice(22.00);
- 		}
- 		
+ 		$params = $new->getParams()->toArray();
+
+ 		if (isset($params['devices'])) {
+ 			$num	= $params['devices'];
+ 			$new->setPrice($new->getPrice() + ($num * 10));
+ 		} 		
 	}
 	
 	public function onPayplansInvoiceAfterSave($prev, $new) {

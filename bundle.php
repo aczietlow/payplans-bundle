@@ -77,14 +77,25 @@ class plgPayplansBundle extends XiPlugin
 			$sub		= $order->getSubscription();
 			$subParams	= $sub->getParams()->toArray();
 			
-			//if ($subParams['name'] == Chris) {
-				$sub->setPrice(99.00);
-				$order->set('total', 99.00);
-				$invoice->set('total', 99.00);
-				//$invoice->set($property);
-				$dump = $payment->getProperties();
-				var_dump($dump);	
-			//}
+// 			$modifer	= PayplansModifier::getInstance();
+// 			$modifer
+// 			->set('message',XiText::_('COM_PAYPLANS_APP_BASIC_DISCOUNT_MESSAGE'))
+// 			->set('invoice_id', $invoiceId)
+// 			->set('user_id', $invoice->getBuyer())
+// 			->set('type', $this->getType())
+// 			->set('amount', - $this
+// 					->getAppParam('coupon_amount', $amount)) // Discount should be negative
+// 					->set('reference', this
+// 							->getAppParam('coupon_code', ''))
+// 							->set('percentage', $isPercentage ? true : false)
+// 							->set('frequency', this
+// 									->getAppParam('onlyFirstRecurringDiscount', false) ? PayplansModifier::FREQUENCY_ONE_TIME : PayplansModifier::FREQUENCY_EACH_TIME);/** * V.V.IMP : this is very important for applying discount in which serial
+// 									* @see PayplansModifier */
+// 			$modifer->save();
+			
+			
+			if ($subParams['name'] == Chris) {
+			}
 		}
 	}
 
