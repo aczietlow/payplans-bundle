@@ -67,22 +67,22 @@ class plgPayplansBundle extends XiPlugin
 			->set('message',XiText::_('Bundle Prices were applied'))
 			->set('invoice_id', $invoiceId)
 			->set('user_id', $invoice->getBuyer())
- 			//->set('type', 'tax')
- 			->set('amount', .50)
+ 			->set('type', 'bundle')
+ 			->set('amount', .99)
 // 					->getAppParam('coupon_amount', $amount)) // Discount should be negative
-// 					->set('reference', $this
+ 			->set('reference', 'Family Bundle')
 // 							->getAppParam('coupon_code', ''))
-// 							->set('percentage', $isPercentage ? true : false)
-// 							->set('frequency', $this
-// 									->getAppParam('onlyFirstRecurringDiscount', false) ? PayplansModifier::FREQUENCY_ONE_TIME : PayplansModifier::FREQUENCY_EACH_TIME);
+			->set('percentage', false)
+			->set('frequency', PayplansModifier::FREQUENCY_EACH_TIME);
+
 			
-			;
-// 			$serial = ($isPercentage === true)? PayplansModifier::PERCENT_NON_TAXABLE: PayplansModifier::FIXED_NON_TAXABLE;
- 			var_dump($modifier);
-			// XITODO : add error checking
-			//$modifier
-			//->set('serial', $serial)
-			//->save();
+			$serial = PayplansModifier::FIXED_NON_TAXABLE;
+
+
+			$modifier
+			->set('serial', $serial)
+			->save();
+			var_dump($modifier);
 			
 				
 		}
