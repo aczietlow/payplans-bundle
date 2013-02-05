@@ -41,38 +41,15 @@ class PayplansAppBundle extends PayplansApp {
 
 	//trigger update based on this event
 	public function onPayplansSubscriptionAfterSave($prev, $new) {
-// 		$modifier = PayplansModifier::getInstance();
-// 		$modifier
-// 		->set('message',XiText::_('COM_PAYPLANS_APP_BASIC_DISCOUNT_MESSAGE'))
-// 		->set('invoice_id', $object->getId())
-// 		->set('user_id', $object->getBuyer())
-// 		->set('type', $this->getType())
-// 		->set('amount', - $this
-// 				->getAppParam('coupon_amount', $amount)) // Discount should be negative
-// 				->set('reference', $this
-// 						->getAppParam('coupon_code', ''))
-// 						->set('percentage', $isPercentage ? true : false)
-// 						->set('frequency', $this
-// 								->getAppParam('onlyFirstRecurringDiscount', false) ? PayplansModifier::FREQUENCY_ONE_TIME : PayplansModifier::FREQUENCY_EACH_TIME);
-// 		$serial = ($isPercentage === true)? PayplansModifier::PERCENT_NON_TAXABLE: PayplansModifier::FIXED_NON_TAXABLE;
-// 		// XITODO : add error checking
-// 		$modifier
-// 		->set('serial', $serial)
-// 		->save();
+
 	}
 
 	public function onPayplansInvoiceAfterSave($prev, $new) {
-// 		$invoiceId 	= $new->getObjectId();
-// 		$order		= PayplansApi::getOrder($orderId);
-// 		$subId		= $order->getSubscription();
-// 		$sub		= PayplansApi::getSubscription($subId);
-// 		$params		= $sub->getParams();
-// 		$data		= $params->toArray();
-// 		$sub->setPrice(33.00);
-// 		$var = $sub->setOrder($order);
-// 		$sub->save();
 
-
+	}
+	
+	public function onPayplansInvoiceUpdatePricing($invoice_id) {
+		
 	}
 
 	/**
