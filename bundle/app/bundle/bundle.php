@@ -48,6 +48,7 @@ class PayplansAppBundle extends PayplansApp {
 
 	}
 	
+	//my custom trigger
 	public function onPayplansInvoiceUpdatePricing($invoice_id) {
 		
 	}

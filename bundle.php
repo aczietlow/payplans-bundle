@@ -33,8 +33,10 @@ class plgPayplansBundle extends XiPlugin
  		$document->addCustomTag( '<script type="text/javascript">jQuery.noConflict();</script>' );
  		$document->addScript($js);
 		
- 		//Include jquery framework
- 		//JHtml::_('jquery.framework');
+//  		$js_test = JURI::base() . 'plugins' . DS . 'payplans' . DS .'bundle' . DS . 'bundle' . DS . 'app' . DS . 'bundle' . DS . 'test.js';
+//  		PayplansHtml::script($js_test);
+ 		//yplansHtml::s
+
  		
 		return true;
 	}
@@ -54,11 +56,13 @@ class plgPayplansBundle extends XiPlugin
 		//If user is logged in and confirming payment task
 		if(($view instanceof PayplanssiteViewInvoice && $task == 'confirm') || ($view instanceof PayplansadminViewInvoice && $task == 'edit'))
 		{
+			var_dump();
 
 						$html = "
-								
-								<label>Family member</label><input type='text' name='family'  /><br />
-								<button id='pp-custom-calculate' type='button' onclick='test_joomla_js()'>add to total</button>
+								<div class ='pp-app-bundle'>
+									<label>Family member</label><input type='text' name='family'  /><br />
+									<button id='pp-custom-calculate' type='button'>add to total</button>
+								</div
 								";
 						var_dump();
 						return array('pp-subscription-details' => $html);

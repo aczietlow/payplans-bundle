@@ -1,6 +1,7 @@
-//(function($){
+//(function(jQuery){
 //if (typeof(payplans.apps)=='undefined'){
 //		payplans.apps = {};
+//		alert('payplans app started');
 //}
 //payplans.apps.custom = {
 //	calculatePricing : function(invoice_id){
@@ -13,37 +14,37 @@
 //};
 // 
 //payplans.jQuery(document).ready(function(){
-//$("#pp-custom-calculate").click(function(){
+//	alert('success');
+//jQuery("#pp-custom-calculate").click(function(){
 //
 //		alert("we're going to need more money now");
-//        var invoice_id = $(this).attr('value');
+//        var invoice_id = jQuery(this).attr('value');
 //
 //        payplans.apps.custom.calculatePricing(invoice_id);
 //	});
 //});
-// 
+ 
 //})(payplans.jQuery);
-//
 
 
 
-function test_joomla_js() {
-	alert('load successful');
-}
 
-//jQuery(document).ready(function(){
-//    jQuery("#rt-mainbody").hide();
-//  });
-
-jQuery('#pp-custom-calculate').ready(function() {
-alert(1);
+//function test_joomla_js() {
+//	alert('load successful');
+//}
+jQuery('document').ready(function(){
+	jQuery('#pp-custom-calculate').click(function(){
+		var split = location.search.replace('?', '').split('&').map(function(val){
+			 //return val;
+			return val.split('=');
+			});
+		alert(split[0][1]);
+		//for (value in split) {
+			
+		//}
+		
+		
+		//var url = "index.php?option=com_payplans&view=invoice&task=trigger&event=onPayplansInvoiceUpdatePricing";
+		//window.location.replace(url);
+	});
 });
-
-
-
-//(function(jQuery) {
-//	jQuery(document).ready(function() {
-//        alert("jquery load successful");
-//    });
-//})(jQuery);
-
