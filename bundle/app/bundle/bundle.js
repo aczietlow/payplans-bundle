@@ -31,10 +31,19 @@ function test_joomla_js() {
 	alert('load successful');
 }
 
-(function($) {
-    $(document).ready(function() {
-        alert("jquery load successful");
-    });
-})(jQuery);
+//jQuery(document).ready(function(){
+//    jQuery("#rt-mainbody").hide();
+//  });
 
-//alert('test');
+jQuery('#pp-custom-calculate').ready(function() {
+alert(1);
+});
+
+
+
+//(function(jQuery) {
+//	jQuery(document).ready(function() {
+//        alert("jquery load successful");
+//    });
+//})(jQuery);
+

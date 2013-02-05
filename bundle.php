@@ -24,18 +24,13 @@ class plgPayplansBundle extends XiPlugin
 		$appPath = dirname(__FILE__).DS.'bundle'.DS.'app';
 		PayplansHelperApp::addAppsPath($appPath);
 
-		//internal method
-		$document = &JFactory::getDocument();
-		$document->addScriptDeclaration('
-
-				//alert("An inline JavaScript Declaration");
-
-				');
-
 		
 		//external method1
  		$document = &JFactory::getDocument();
  		$js = JURI::base() . 'plugins' . DS . 'payplans' . DS .'bundle' . DS . 'bundle' . DS . 'app' . DS . 'bundle' . DS . 'bundle.js';
+ 		//add noconflict to use jQuery with Mootools
+ 		$document->addScript('http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js');
+ 		$document->addCustomTag( '<script type="text/javascript">jQuery.noConflict();</script>' );
  		$document->addScript($js);
 		
  		//Include jquery framework
