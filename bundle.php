@@ -24,20 +24,20 @@ class plgPayplansBundle extends XiPlugin
 		$appPath = dirname(__FILE__).DS.'bundle'.DS.'app';
 		PayplansHelperApp::addAppsPath($appPath);
 
-		
-		//external method1
- 		$document = &JFactory::getDocument();
- 		$js = JURI::base() . 'plugins' . DS . 'payplans' . DS .'bundle' . DS . 'bundle' . DS . 'app' . DS . 'bundle' . DS . 'bundle.js';
- 		//add noconflict to use jQuery with Mootools
- 		$document->addScript('http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js');
- 		$document->addCustomTag( '<script type="text/javascript">jQuery.noConflict();</script>' );
- 		$document->addScript($js);
-		
-//  		$js_test = JURI::base() . 'plugins' . DS . 'payplans' . DS .'bundle' . DS . 'bundle' . DS . 'app' . DS . 'bundle' . DS . 'test.js';
-//  		PayplansHtml::script($js_test);
- 		//yplansHtml::s
 
- 		
+		//external method1
+		$document = &JFactory::getDocument();
+		$js = JURI::base() . 'plugins' . DS . 'payplans' . DS .'bundle' . DS . 'bundle' . DS . 'app' . DS . 'bundle' . DS . 'bundle.js';
+		//add noconflict to use jQuery with Mootools
+		$document->addScript('http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js');
+		$document->addCustomTag( '<script type="text/javascript">jQuery.noConflict();</script>' );
+		$document->addScript($js);
+
+		//  		$js_test = JURI::base() . 'plugins' . DS . 'payplans' . DS .'bundle' . DS . 'bundle' . DS . 'app' . DS . 'bundle' . DS . 'test.js';
+		//  		PayplansHtml::script($js_test);
+		//yplansHtml::s
+
+			
 		return true;
 	}
 
@@ -56,16 +56,19 @@ class plgPayplansBundle extends XiPlugin
 		//If user is logged in and confirming payment task
 		if(($view instanceof PayplanssiteViewInvoice && $task == 'confirm') || ($view instanceof PayplansadminViewInvoice && $task == 'edit'))
 		{
-			var_dump();
+			$invoiceId = $view->getModel()->getId();
+			$invoice = PayplansApi::getInvoice($invoiceId);
+			var_dump($invoiceId);
 
-						$html = "
-								<div class ='pp-app-bundle'>
-									<label>Family member</label><input type='text' name='family'  /><br />
-									<button id='pp-custom-calculate' type='button'>add to total</button>
-								</div
-								";
-						var_dump();
-						return array('pp-subscription-details' => $html);
+
+			$html = "
+					<div class ='pp-app-bundle'>
+					<label>Family member</label><input type='text' name='family'  /><br />
+					<button id='pp-custom-calculate' type='button'>add to total</button>
+					</div
+					";
+			var_dump();
+			return array('pp-subscription-details' => $html);
 		}
 
 		//view of subscription invoice.
