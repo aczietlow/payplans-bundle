@@ -58,16 +58,15 @@ class plgPayplansBundle extends XiPlugin
 		{
 			$invoiceId = $view->getModel()->getId();
 			$invoice = PayplansApi::getInvoice($invoiceId);
-			var_dump($invoiceId);
 
 
 			$html = "
 					<div class ='pp-app-bundle'>
-					<label>Family member</label><input type='text' name='family'  /><br />
+					<label>Family member</label><input type='text' name='family' value='jim' /><br />
+					<input type='hidden' name='invoiceId' value='". $invoiceId ."'/>
 					<button id='pp-custom-calculate' type='button'>add to total</button>
 					</div
 					";
-			var_dump();
 			return array('pp-subscription-details' => $html);
 		}
 
