@@ -45,11 +45,12 @@ class PayplansAppBundle extends PayplansApp {
 	}
 
 	public function onPayplansInvoiceAfterSave($prev, $new) {
-
+		
 	}
 	
 	//my custom trigger
 	public function onPayplansInvoiceUpdatePricing($invoiceId) {
+		
 		
 		$invoice = PayplansApi::getInvoice($invoiceId);
 		
@@ -66,6 +67,7 @@ class PayplansAppBundle extends PayplansApp {
 		->save();
 			
 		$invoice->refresh()->save();
+		//header('location: index.php?option=com_payplans&view=invoice&task=confirm&invoice_key=8XRE0BAJGB6J&Itemid=228');
 	}
 
 	/**
