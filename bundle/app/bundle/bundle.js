@@ -18,7 +18,7 @@
 			};
 			//alert(invoiceId+'|'+url);
 			payplans.ajax.go(url, args);
-			alert(document.URL);
+			alert(window.location.search);
 		}
 	};
 

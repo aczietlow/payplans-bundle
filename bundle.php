@@ -17,25 +17,6 @@ defined( '_JEXEC' ) or die( 'Restricted access' );
 */
 class plgPayplansBundle extends XiPlugin
 {
-	public function onPayplansInvoiceUpdatePricing($invoiceId) {
-	
-	
-		$invoice = PayplansApi::getInvoice($invoiceId);
-	
-		$modifier = PayplansModifier::getInstance();
-		$modifier->set('message', 'Applying additional cost here')
-		->set('invoice_id', $invoiceId)
-		->set('user_id', $invoice->getBuyer())
-		->set('type', 'bundle')
-		->set('amount', 0.99)
-		->set('reference', 'bundle')
-		->set('percentage', false)
-		->set('frequency', PayplansModifier::FREQUENCY_EACH_TIME)
-		->set('serial', PayplansModifier::FIXED_NON_TAXABLE)
-		->save();
-			
-		$invoice->refresh()->save();
-	}
 
 	public function onPayplansSystemStart()
 	{
@@ -44,14 +25,19 @@ class plgPayplansBundle extends XiPlugin
 		PayplansHelperApp::addAppsPath($appPath);
 
 
-		//external method1
+		//Add style sheet for input fields
 		$document = &JFactory::getDocument();
-		$js = JURI::base() . 'plugins' . DS . 'payplans' . DS .'bundle' . DS . 'bundle' . DS . 'app' . DS . 'bundle' . DS . 'bundle.js';
+		$css = JURI::base() . 'plugins' . DS . 'payplans' .
+				DS .'bundle' . DS . 'bundle' . DS . 'app' . DS . 'bundle' . DS . 'bundle.css';
+		$document->addStyleSheet($css);
+
+
+		//$js = JURI::base() . 'plugins' . DS . 'payplans' . DS .'bundle' . DS . 'bundle' . DS . 'app' . DS . 'bundle' . DS . 'bundle.js';
 		//add noconflict to use jQuery with Mootools
 		//added the script in the body. Has access to the payplans jquery functions
-// 		$document->addScript('http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js');
-// 		$document->addCustomTag( '<script type="text/javascript">jQuery.noConflict();</script>' );
-// 		$document->addScript($js);
+		// 		$document->addScript('http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js');
+		// 		$document->addCustomTag( '<script type="text/javascript">jQuery.noConflict();</script>' );
+		// 		$document->addScript($js);
 
 		//  		$js_test = JURI::base() . 'plugins' . DS . 'payplans' . DS .'bundle' . DS . 'bundle' . DS . 'app' . DS . 'bundle' . DS . 'test.js';
 		//  		PayplansHtml::script($js_test);
@@ -84,9 +70,9 @@ class plgPayplansBundle extends XiPlugin
 					<div class ='pp-app-bundle'>
 					<label>Family member</label><input type='text' name='family' value='jim' /><br />
 					<input type='hidden' name='invoiceId' value='". $invoiceId ."'/>
-					<button id='pp-custom-calculate' type='button'>add to total</button>
-					</div
-					";
+							<button id='pp-custom-calculate' type='button'>add to total</button>
+							</div
+							";
 			return array('pp-subscription-details' => $html);
 		}
 
@@ -94,6 +80,30 @@ class plgPayplansBundle extends XiPlugin
 		if (($view instanceof PayplanssiteViewPayment) && $task == 'pay')
 		{
 		}
+	}
+	/**
+	 * custom pricing update trigger. Is triggered via ajax call from bundle.js
+	 * @param int $invoiceId
+	 * Invoice id used for querying the invoice whose price will be updated.
+	 */
+	public function onPayplansInvoiceUpdatePricing($invoiceId) {
+
+
+		$invoice = PayplansApi::getInvoice($invoiceId);
+
+		$modifier = PayplansModifier::getInstance();
+		$modifier->set('message', 'Applying additional cost here')
+		->set('invoice_id', $invoiceId)
+		->set('user_id', $invoice->getBuyer())
+		->set('type', 'bundle')
+		->set('amount', 0.99)
+		->set('reference', 'bundle')
+		->set('percentage', false)
+		->set('frequency', PayplansModifier::FREQUENCY_EACH_TIME)
+		->set('serial', PayplansModifier::FIXED_NON_TAXABLE)
+		->save();
+
+		$invoice->refresh()->save();
 	}
 
 }

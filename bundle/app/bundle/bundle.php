@@ -48,27 +48,7 @@ class PayplansAppBundle extends PayplansApp {
 		
 	}
 	
-	//my custom trigger
-	public function onPayplansInvoiceUpdatePricing($invoiceId) {
-		
-		
-		$invoice = PayplansApi::getInvoice($invoiceId);
-		
-		$modifier = PayplansModifier::getInstance();
-		$modifier->set('message', 'Applying additional cost here')
-		->set('invoice_id', $invoiceId)
-		->set('user_id', $invoice->getBuyer())
-		->set('type', 'bundle')
-		->set('amount', 0.99)
-		->set('reference', 'bundle')
-		->set('percentage', false)
-		->set('frequency', PayplansModifier::FREQUENCY_EACH_TIME)
-		->set('serial', PayplansModifier::FIXED_NON_TAXABLE)
-		->save();
-			
-		$invoice->refresh()->save();
-		//header('location: index.php?option=com_payplans&view=invoice&task=confirm&invoice_key=8XRE0BAJGB6J&Itemid=228');
-	}
+
 
 	/**
 
