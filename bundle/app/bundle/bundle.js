@@ -8,23 +8,28 @@
 	}
 	
 	payplans.apps.bundle = {
-		calculatePricing : function(invoiceId) {
+		calculatePricing : function(invoiceId, familyChildren, familyAdult) {
 
 			var url = "index.php?option=com_payplans&view=invoice&task=trigger&event=onPayplansInvoiceUpdatePricing";
 			var args = {
 				'event_args' : {
-					'invoiceId' : invoiceId
+					'invoiceId' : invoiceId,
+					'familyChildren' : 1,
+					'familyAdult'	:4,
 				}
 			};
 			//alert(invoiceId+'|'+url);
 			payplans.ajax.go(url, args);
-			alert(window.location.search);
+			//window.location.href = window.location.href;
 		}
 	};
 
 	payplans.jQuery('document').ready(function() {
 		payplans.jQuery('#pp-custom-calculate').click(function () {
 			var invoiceId = payplans.jQuery('input[name="invoiceId"]').val();
+			var familyChildren = 1;
+			var familyAdult = 4;
+			
 			payplans.apps.bundle.calculatePricing(invoiceId);
 		});
 		

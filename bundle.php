@@ -73,6 +73,8 @@ class plgPayplansBundle extends XiPlugin
 							<button id='pp-custom-calculate' type='button'>add to total</button>
 							</div
 							";
+			var_dump($invoice->getParam('familyChildren'));
+			var_dump($invoice->getParam('familyAdult'));
 			return array('pp-subscription-details' => $html);
 		}
 
@@ -86,11 +88,15 @@ class plgPayplansBundle extends XiPlugin
 	 * @param int $invoiceId
 	 * Invoice id used for querying the invoice whose price will be updated.
 	 */
-	public function onPayplansInvoiceUpdatePricing($invoiceId) {
+	public function onPayplansInvoiceUpdatePricing($invoiceId, $familyChildren, $familyAdult) {
 
-
+		
+		
 		$invoice = PayplansApi::getInvoice($invoiceId);
-
+		
+		$invoice->setParam('familyChildren', $familyChildren);
+		$invoice->setParam('familyAdult', $familyAdult);
+		
 		$modifier = PayplansModifier::getInstance();
 		$modifier->set('message', 'Applying additional cost here')
 		->set('invoice_id', $invoiceId)
