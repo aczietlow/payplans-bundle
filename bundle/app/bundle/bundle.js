@@ -25,14 +25,32 @@
 	};
 
 	payplans.jQuery('document').ready(function() {
+		
+		var i = payplans.jQuery('#.pp-app-bundle-inputs input').size() + 1;
+		
 		payplans.jQuery('#pp-custom-calculate').click(function () {
 			var invoiceId = payplans.jQuery('input[name="invoiceId"]').val();
-			var familyChildren = 1;
-			var familyAdult = 4;
+			alert($(":input[name='family']").val().length);
 			
 			payplans.apps.bundle.calculatePricing(invoiceId);
 		});
 		
+		payplans.jQuery('#pp-custom-addFamily').click(function() {
+			payplans.jQuery('<div><input type="text" class="field" name="dynamic[]" value="' + i + '" /></div>').fadeIn('slow').appendTo('.pp-app-bundle-inputs');
+	        i++;
+		});
+		payplans.jQuery('#pp-custom-removeFamily').click(function() {
+			if(i > 1) {
+		        $('.field:last').remove();
+		        i--;
+		    }
+		});
+		payplans.jQuery('#pp-custom-resetFamily').click(function() {
+			while(i > 2) {
+		        $('.field:last').remove();
+		        i--;
+		    }
+		});
 	});
 	// ENDING :
 	// Scoping code for easy and non-conflicting access to $.
