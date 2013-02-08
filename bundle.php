@@ -94,18 +94,17 @@ class plgPayplansBundle extends XiPlugin
 	 */
 	public function onPayplansInvoiceUpdatePricing($invoiceId, $familyChildren, $familyAdult) {
 
-		if ($familyChildren < 0) {
-			$familyChildren = 0;
-		}
+// 		if ($familyChildren < 0) {
+// 			$familyChildren = 0;
+// 		}
 
-		if ($familyAdult < 0) {
-			$familyAdult = 0;
-		}
+// 		if ($familyAdult < 0) {
+// 			$familyAdult = 0;
+// 		}
 		
 		$invoice = PayplansApi::getInvoice($invoiceId);
 		
-		$invoice->setParam('familyChildren', $familyChildren);
-		$invoice->setParam('familyAdult', $familyAdult);
+		
 
 		$amount = ($familyChildren * 75.00) + ($familyAdult * 120.00);		
 		
@@ -121,6 +120,15 @@ class plgPayplansBundle extends XiPlugin
 		->set('serial', PayplansModifier::FIXED_NON_TAXABLE)
 		->save();
 
+		$invoice->refresh()->save();
+	}
+	
+	public function onPayplansInvoiceAddParams($invoiceId, $familyName, $dob, $sex, $u18) {
+		$invoice = PayplansApi::getInvoice($invoiceId);
+		
+		$invoice->setParam('familyChildren', $familyName);
+		$invoice->setParam('familyAdult', $dob);
+		
 		$invoice->refresh()->save();
 	}
 

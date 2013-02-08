@@ -15,13 +15,30 @@
 				'event_args' : {
 					'invoiceId' : invoiceId,
 					'familyChildren' : familyMembers,
+					//'familyAdult'	: array,
 				}
 			};
 			//alert(invoiceId+'|'+url);
 			payplans.ajax.go(url, args);
 			//window.location.href = window.location.href;
+		},
+		
+		addParams : function(invoiceId, familyName, dob, sex, u18) {
+			var url = "index.php?option=com_payplans&view=invoice&task=trigger&event=onPayplansInvoiceAddParams";
+			var args = {
+				'event_args' : {
+					'invoiceId' : invoiceId,
+					'familyName' : familyName,
+					'dob' : dob,
+					'sex' : sex,
+					'u18' : u18,
+				}
+			};
+			payplans.ajax.go(url, args);
 		}
 	};
+	
+
 
 	payplans.jQuery('document').ready(function() {
 		
@@ -30,7 +47,14 @@
 		payplans.jQuery('#pp-custom-calculate').click(function () {
 			var invoiceId = payplans.jQuery('input[name="invoiceId"]').val();
 			var familyMembers = i - 1;
-			payplans.apps.bundle.calculatePricing(invoiceId, familyMembers );
+			
+			//temp var
+			var familyName = "chris zietlow";
+			var dob = "1/1/11";
+			var sex = "male";
+			var u18 = true;
+			payplans.apps.bundle.addParams(invoiceId, familyName, dob, sex, u18);
+			//payplans.apps.bundle.calculatePricing(invoiceId, familyMembers );
 		});
 		
 		//add 1 add family field set
@@ -78,7 +102,7 @@
 		 
 		    alert(answers);
 		     
-		    return false;
+		    return false; //stop the completion of the order for debugging only
 		                                 
 		    });
 	});
