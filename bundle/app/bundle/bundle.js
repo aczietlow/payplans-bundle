@@ -8,9 +8,15 @@
 	}
 	
 	payplans.apps.bundle = {
-		// update the price of the invoice object via ajax call
+		/**
+		 * Updates the price of the invoice object via ajax call
+		 * @param int invoiceId
+		 * The id of the invoice to be updated
+		 * @param int familyMembers
+		 * The number of family members that have been added to the subscription.
+		 */
 		calculatePricing : function(invoiceId, familyMembers) {
-
+			
 			var url = "index.php?option=com_payplans&view=invoice&task=trigger&event=onPayplansInvoiceUpdatePricing";
 			var args = {
 				'event_args' : {
@@ -19,30 +25,61 @@
 					//'familyAdult'	: array,
 				}
 			};
-			//alert(invoiceId+'|'+url);
+			//makes ajax call
 			payplans.ajax.go(url, args);
-			//window.location.href = window.location.href;
 		},
 		
-		addParams : function(invoiceId, familyName, dob, sex, u18) {
-			var url = "index.php?option=com_payplans&view=invoice&task=trigger&event=onPayplansInvoiceAddParams";
-			var args = {
-				'event_args' : {
-					'invoiceId' : invoiceId,
-					'familyName' : familyName,
-					'dob' : dob,
-					'sex' : sex,
-					'u18' : u18,
-				}
-			};
-			for (var i =0; i < familyName.length; i++) {
-				alert(familyName[i] + " "  +
-						dob[i] + " "  +
-						sex[i] + " "  +
-						u18[i]);
-			}
+		/**
+		 * Adds the family members to the invoice object params property
+		 * 
+		 * @param invoiceId
+		 * The id of the invoice to be updated
+		 * @param familyName
+		 * The name of the family member to be added to the invoice
+		 * @param dob
+		 * The date of birth of the family member
+		 * @param sex
+		 * The sex of the family member
+		 * @param u18
+		 * Determines if the family member is under 18
+		 */
+		//#TODO use dob to check the date of the family member
+		addParams : function(invoiceId, familyChildren, familyAdults) {
 			
-			//payplans.ajax.go(url, args);
+			for (var i = 0; i < familyChildren.name.length; i++) {
+				var url = "index.php?option=com_payplans&view=invoice&task=trigger&event=onPayplansInvoiceAddChildren";
+				var args = {
+					'event_args' : {
+						'invoiceId' : invoiceId,
+						'familyName' : familyChildren.name[i],
+						'dob' : familyChildren.dob[i],
+						'sex' : familyChildren.sex[i],
+						'u18' : familyChildren.u18[i],
+					}
+				};
+				
+				//makes ajax call
+				payplans.ajax.go(url, args);
+			};
+			
+			for (var i = 0; i < familyAdults.name.length; i++) {
+				var url = "index.php?option=com_payplans&view=invoice&task=trigger&event=onPayplansInvoiceAddAdult";
+				var args = {
+						'event_args' : {
+							'invoiceId' : invoiceId,
+							'familyName' : familyAdults.name[i], 
+							'dob' : familyAdults.dob[i],
+							'sex' : familyAdults.sex[i],
+							'u18' : familyAdults.u18[i],
+						}
+				};
+				
+				//makes ajax call
+				payplans.ajax.go(url, args);
+			};
+			
+			
+		
 		},
 		
 
@@ -56,6 +93,8 @@
 		
 		payplans.jQuery('#pp-custom-calculate').click(function () {
 			var invoiceId = payplans.jQuery('input[name="invoiceId"]').val();
+			var count = payplans.jQuery('#.pp-app-bundle-inputs input').size();
+			
 			
 			var familyMembers = new Object();
 			familyMembers.name = [];
@@ -75,21 +114,28 @@
 			familyAdults.sex = [];
 			familyAdults.u18 = [];
 			
+			alert(count);
+			//populate familyMembers object
 			payplans.jQuery.each(payplans.jQuery('.fieldFamilyName'), function() {
 		        familyMembers.name.push(payplans.jQuery(this).val());
 		    });
-			payplans.jQuery.each(payplans.jQuery('.fieldFamilySex'), function() {
+			payplans.jQuery.each(payplans.jQuery('.fieldFamilyDOB'), function() {
 				familyMembers.dob.push(payplans.jQuery(this).val());
 			});
-			payplans.jQuery.each(payplans.jQuery('.fieldFamilyDOB'), function() {
+			payplans.jQuery.each(payplans.jQuery('.fieldFamilySex'), function() {
 				familyMembers.sex.push(payplans.jQuery(this).val());
 			});
-			payplans.jQuery.each(payplans.jQuery('.fieldFamilyU18'), function() {
+			payplans.jQuery.each(payplans.jQuery('input[name=bundle-u18-' + i + ':checked'), function() {
 				familyMembers.u18.push(payplans.jQuery(this).val());
 			});
 			
+			alert("name: " + familyMembers.name + 
+					'sex :' + familyMembers.sex +
+					'dob: ' + familyMembers.dob +
+					'u18: ' + familyMembers.u18);
+			//polymorph members object to children or adults respectively
 			for (var i = 0; i < familyMembers.name.length; i++) {
-				if (familyMembers.u18[i] == 'True') {
+				if (familyMembers.u18[i] === 'True') {
 					familyChildren.name.push(familyMembers.name[i]);
 					familyChildren.sex.push(familyMembers.sex[i]);
 					familyChildren.dob.push(familyMembers.dob[i]);
@@ -100,11 +146,13 @@
 					familyAdults.sex.push(familyMembers.sex[i]);
 					familyAdults.dob.push(familyMembers.dob[i]);
 					familyAdults.u18.push(familyMembers.u18[i]);
+					alert(familyMembers.name[i] + " u18 = " + familyMembers.u18[i]);
 				}
 				
 			}
-			payplans.apps.bundle.addParams(invoiceId, familyMembers);
-			payplans.apps.bundle.calculatePricing(invoiceId, familyMembers.name.length );
+			
+			payplans.apps.bundle.addParams(invoiceId, familyChildren, familyAdults);
+			//payplans.apps.bundle.calculatePricing(invoiceId, i );
 		});
 		
 		//add 1 add family field set
@@ -132,7 +180,7 @@
 		
 		//reset add family fields
 		payplans.jQuery('#pp-custom-resetFamily').click(function() {
-			while(i > 2) {
+			while(i > 1) {
 		        $('.field:last').remove();
 		        i--;
 		    }

@@ -77,8 +77,8 @@ class plgPayplansBundle extends XiPlugin
 							</div>
 							</div>
 							";
-			var_dump($invoice->getParam('familyChildren'));
-			var_dump($invoice->getParam('familyAdult'));
+			var_dump("child: " . $invoice->getParam('familyChildren'));
+			var_dump("Adult: " . $invoice->getParam('familyAdult'));
 			return array('pp-subscription-details' => $html);
 		}
 
@@ -123,11 +123,18 @@ class plgPayplansBundle extends XiPlugin
 		$invoice->refresh()->save();
 	}
 
-	public function onPayplansInvoiceAddParams($invoiceId, $familyName, $dob, $sex, $u18) {
+	public function onPayplansInvoiceAddChildren($invoiceId, $familyName, $dob, $sex, $u18) {
 		$invoice = PayplansApi::getInvoice($invoiceId);
 
 		$invoice->setParam('familyChildren', $familyName);
-		$invoice->setParam('familyAdult', $dob);
+
+		$invoice->refresh()->save();
+	}
+	
+	public function onPayplansInvoiceAddAdult($invoiceId, $familyName, $dob, $sex, $u18) {
+		$invoice = PayplansApi::getInvoice($invoiceId);
+
+		$invoice->setParam('familyAdult', $familyName);
 
 		$invoice->refresh()->save();
 	}
