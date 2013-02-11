@@ -68,14 +68,14 @@ class plgPayplansBundle extends XiPlugin
 			$payplans_js = "<script src='" . PayplansHelperUtils::pathFS2URL(dirname(__FILE__).DS. 'bundle' . DS . 'app' . DS . 'bundle' . DS . 'bundle.js') ."' type='text/javascript'></script>";
 			$html = $payplans_js . "
 					<div class ='pp-app-bundle'>
-						<button id='pp-custom-calculate' type='button'>add to total</button><br />
-						<button id='pp-custom-addFamily' type='button'>Add</button>
-						<button id='pp-custom-removeFamily' type='button'>Remove</button>
-						<button id='pp-custom-resetFamily' type='button'>Reset</button>
-						<div class='pp-app-bundle-inputs'>
-							<input type='hidden' name='invoiceId' value='". $invoiceId ."'/>
-						</div>
-					</div>
+					<button id='pp-custom-calculate' type='button'>add to total</button><br />
+					<button id='pp-custom-addFamily' type='button'>Add</button>
+					<button id='pp-custom-removeFamily' type='button'>Remove</button>
+					<button id='pp-custom-resetFamily' type='button'>Reset</button>
+					<div class='pp-app-bundle-inputs'>
+					<input type='hidden' name='invoiceId' value='". $invoiceId ."'/>
+							</div>
+							</div>
 							";
 			var_dump($invoice->getParam('familyChildren'));
 			var_dump($invoice->getParam('familyAdult'));
@@ -92,22 +92,22 @@ class plgPayplansBundle extends XiPlugin
 	 * @param int $invoiceId
 	 * Invoice id used for querying the invoice whose price will be updated.
 	 */
-	public function onPayplansInvoiceUpdatePricing($invoiceId, $familyChildren, $familyAdult) {
+	public function onPayplansInvoiceUpdatePricing($invoiceId, $familyMembers) {
 
-// 		if ($familyChildren < 0) {
-// 			$familyChildren = 0;
-// 		}
+		// 		if ($familyChildren < 0) {
+		// 			$familyChildren = 0;
+		// 		}
 
-// 		if ($familyAdult < 0) {
-// 			$familyAdult = 0;
-// 		}
-		
+		// 		if ($familyAdult < 0) {
+		// 			$familyAdult = 0;
+		// 		}
+
 		$invoice = PayplansApi::getInvoice($invoiceId);
-		
-		
 
-		$amount = ($familyChildren * 75.00) + ($familyAdult * 120.00);		
-		
+
+
+		$amount = ($familyMembers * 75.00) + ($familyMembers * 120.00);
+
 		$modifier = PayplansModifier::getInstance();
 		$modifier->set('message', 'Applying additional cost here')
 		->set('invoice_id', $invoiceId)
@@ -122,13 +122,13 @@ class plgPayplansBundle extends XiPlugin
 
 		$invoice->refresh()->save();
 	}
-	
+
 	public function onPayplansInvoiceAddParams($invoiceId, $familyName, $dob, $sex, $u18) {
 		$invoice = PayplansApi::getInvoice($invoiceId);
-		
+
 		$invoice->setParam('familyChildren', $familyName);
 		$invoice->setParam('familyAdult', $dob);
-		
+
 		$invoice->refresh()->save();
 	}
 

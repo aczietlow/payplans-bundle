@@ -8,6 +8,7 @@
 	}
 	
 	payplans.apps.bundle = {
+		// update the price of the invoice object via ajax call
 		calculatePricing : function(invoiceId, familyMembers) {
 
 			var url = "index.php?option=com_payplans&view=invoice&task=trigger&event=onPayplansInvoiceUpdatePricing";
@@ -34,8 +35,17 @@
 					'u18' : u18,
 				}
 			};
-			payplans.ajax.go(url, args);
-		}
+			for (var i =0; i < familyName.length; i++) {
+				alert(familyName[i] + " "  +
+						dob[i] + " "  +
+						sex[i] + " "  +
+						u18[i]);
+			}
+			
+			//payplans.ajax.go(url, args);
+		},
+		
+
 	};
 	
 
@@ -46,28 +56,68 @@
 		
 		payplans.jQuery('#pp-custom-calculate').click(function () {
 			var invoiceId = payplans.jQuery('input[name="invoiceId"]').val();
-			var familyMembers = i - 1;
 			
-			//temp var
-			var familyName = "chris zietlow";
-			var dob = "1/1/11";
-			var sex = "male";
-			var u18 = true;
-			payplans.apps.bundle.addParams(invoiceId, familyName, dob, sex, u18);
-			//payplans.apps.bundle.calculatePricing(invoiceId, familyMembers );
+			var familyMembers = new Object();
+			familyMembers.name = [];
+			familyMembers.dob = [];
+			familyMembers.sex = [];
+			familyMembers.u18 = [];
+			
+			var familyChildren = new Object();
+			familyChildren.name = [];
+			familyChildren.dob = [];
+			familyChildren.sex = [];
+			familyChildren.u18 = [];
+			
+			var familyAdults = new Object();
+			familyAdults.name = [];
+			familyAdults.dob = [];
+			familyAdults.sex = [];
+			familyAdults.u18 = [];
+			
+			payplans.jQuery.each(payplans.jQuery('.fieldFamilyName'), function() {
+		        familyMembers.name.push(payplans.jQuery(this).val());
+		    });
+			payplans.jQuery.each(payplans.jQuery('.fieldFamilySex'), function() {
+				familyMembers.dob.push(payplans.jQuery(this).val());
+			});
+			payplans.jQuery.each(payplans.jQuery('.fieldFamilyDOB'), function() {
+				familyMembers.sex.push(payplans.jQuery(this).val());
+			});
+			payplans.jQuery.each(payplans.jQuery('.fieldFamilyU18'), function() {
+				familyMembers.u18.push(payplans.jQuery(this).val());
+			});
+			
+			for (var i = 0; i < familyMembers.name.length; i++) {
+				if (familyMembers.u18[i] == 'True') {
+					familyChildren.name.push(familyMembers.name[i]);
+					familyChildren.sex.push(familyMembers.sex[i]);
+					familyChildren.dob.push(familyMembers.dob[i]);
+					familyChildren.u18.push(familyMembers.u18[i]);
+				}
+				else {
+					familyAdults.name.push(familyMembers.name[i]);
+					familyAdults.sex.push(familyMembers.sex[i]);
+					familyAdults.dob.push(familyMembers.dob[i]);
+					familyAdults.u18.push(familyMembers.u18[i]);
+				}
+				
+			}
+			payplans.apps.bundle.addParams(invoiceId, familyMembers);
+			payplans.apps.bundle.calculatePricing(invoiceId, familyMembers.name.length );
 		});
 		
 		//add 1 add family field set
 		payplans.jQuery('#pp-custom-addFamily').click(function() {
 			payplans.jQuery('<div class="field">' +
-					'<label>Family Member Name</label><input type="text" class="fieldFamilyName" name="dynamic[]" value="' + i + '" /><br />'+
+					'<label>Family Member Name</label><input type="text" class="fieldFamilyName" name="bundle[]" value="' + i + '" /><br />'+
 					'<label>Sex| </label>' +
-					'<label>Male</label><input type="radio" name="dynamic[]" value="M" />'+
-					'<label>Female</label><input type="radio" name="dynamic[]" value="F" /><br />'+
-					'<label>Date of Birth</label><input type="text"  name="dynamic[]" value="' + i + '" /><br />'+
+					'<label>Male</label><input type="radio" class="fieldFamilySex" name="bundle-sex-' + i + '[]" value="M" />'+
+					'<label>Female</label><input type="radio" class="fieldFamilySex" name="bundle-sex-' + i + '[]" value="F" /><br />'+
+					'<label>Date of Birth</label><input type="text" class="fieldFamilyDOB" name="bundle-dob[]" value="' + i + '" /><br />'+
 					'<label>Under 18 | </label>' +
-					'<label>Yes</label><input type="radio" name="dynamic[]" value="True" />'+
-					'<label>No</label><input type="radio" name="dynamic[]" value="False" /><br /><hr />'+
+					'<label>Yes</label><input type="radio" class="fieldFamilyU18" name="bundle-u18-' + i + '[]" value="True" />'+
+					'<label>No</label><input type="radio" class="fieldFamilyU18" name="bundle-u18-' + i + '[]" value="False" /><br /><hr />'+
 					'</div>').fadeIn('slow').appendTo('.pp-app-bundle-inputs');
 	        i++;
 		});
@@ -88,7 +138,7 @@
 		    }
 		});
 		
-		//sibmit function
+		//submit function
 		payplans.jQuery('#payplans-order-confirm').click(function(){
             
 		    var answers = [];
@@ -110,15 +160,3 @@
 	// Scoping code for easy and non-conflicting access to $.
 	// Should be last line, write code above this line.
 })(payplans.jQuery);
-
-// jQuery('document').ready(function(){
-// jQuery('#pp-custom-calculate').click(function(){
-// var invoiceId = jQuery('input[name="invoiceId"]').val();
-// var url =
-// "index.php?option=com_payplans&view=invoice&task=trigger&event=onPayplansInvoceiUpdatePricing";
-// var args = { 'event_args' : {'invoice_id' : invoiceId} };
-// alert(url);
-//		 
-//		
-// });
-// });
