@@ -90,10 +90,11 @@
 	payplans.jQuery('document').ready(function() {
 		
 		var i = payplans.jQuery('#.pp-app-bundle-inputs input').size();
-		
+
 		payplans.jQuery('#pp-custom-calculate').click(function () {
+			var count = i-1;
 			var invoiceId = payplans.jQuery('input[name="invoiceId"]').val();
-			var count = payplans.jQuery('#.pp-app-bundle-inputs input').size();
+			
 			
 			
 			var familyMembers = new Object();
@@ -114,7 +115,7 @@
 			familyAdults.sex = [];
 			familyAdults.u18 = [];
 			
-			alert(count);
+			
 			//populate familyMembers object
 			payplans.jQuery.each(payplans.jQuery('.fieldFamilyName'), function() {
 		        familyMembers.name.push(payplans.jQuery(this).val());
@@ -125,34 +126,30 @@
 			payplans.jQuery.each(payplans.jQuery('.fieldFamilySex'), function() {
 				familyMembers.sex.push(payplans.jQuery(this).val());
 			});
-			payplans.jQuery.each(payplans.jQuery('input[name=bundle-u18-' + i + ':checked'), function() {
+			payplans.jQuery.each(payplans.jQuery('input[name=bundle-u18-'+ i +'[]]:checked'), function() {
 				familyMembers.u18.push(payplans.jQuery(this).val());
 			});
-			
-			alert("name: " + familyMembers.name + 
-					'sex :' + familyMembers.sex +
-					'dob: ' + familyMembers.dob +
-					'u18: ' + familyMembers.u18);
+			alert(count);
+			alert('u18: ' + familyMembers.u18);
 			//polymorph members object to children or adults respectively
-			for (var i = 0; i < familyMembers.name.length; i++) {
-				if (familyMembers.u18[i] === 'True') {
-					familyChildren.name.push(familyMembers.name[i]);
-					familyChildren.sex.push(familyMembers.sex[i]);
-					familyChildren.dob.push(familyMembers.dob[i]);
-					familyChildren.u18.push(familyMembers.u18[i]);
+			for (var j = 0; j < count; j++) {
+				if (familyMembers.u18[j] === 'True') {
+					familyChildren.name.push(familyMembers.name[j]);
+					familyChildren.sex.push(familyMembers.sex[j]);
+					familyChildren.dob.push(familyMembers.dob[j]);
+					familyChildren.u18.push(familyMembers.u18[j]);
 				}
 				else {
-					familyAdults.name.push(familyMembers.name[i]);
-					familyAdults.sex.push(familyMembers.sex[i]);
-					familyAdults.dob.push(familyMembers.dob[i]);
-					familyAdults.u18.push(familyMembers.u18[i]);
-					alert(familyMembers.name[i] + " u18 = " + familyMembers.u18[i]);
+					familyAdults.name.push(familyMembers.name[j]);
+					familyAdults.sex.push(familyMembers.sex[j]);
+					familyAdults.dob.push(familyMembers.dob[j]);
+					familyAdults.u18.push(familyMembers.u18[j]);
 				}
 				
 			}
 			
-			payplans.apps.bundle.addParams(invoiceId, familyChildren, familyAdults);
-			//payplans.apps.bundle.calculatePricing(invoiceId, i );
+//			payplans.apps.bundle.addParams(invoiceId, familyChildren, familyAdults);
+//			payplans.apps.bundle.calculatePricing(invoiceId, count );
 		});
 		
 		//add 1 add family field set
@@ -198,7 +195,7 @@
 		        answers = "none";
 		    }  
 		 
-		    alert(answers);
+		    alert(i);
 		     
 		    return false; //stop the completion of the order for debugging only
 		                                 
