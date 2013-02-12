@@ -57,7 +57,7 @@
 						'u18' : familyChildren.u18[i],
 					}
 				};
-				
+				alert(familyChildren.name[i] + " is a child");
 				//makes ajax call
 				payplans.ajax.go(url, args);
 			};
@@ -73,7 +73,7 @@
 							'u18' : familyAdults.u18[i],
 						}
 				};
-				
+				alert(familyAdults.name[i] + " is an adult");
 				//makes ajax call
 				payplans.ajax.go(url, args);
 			};
@@ -126,11 +126,9 @@
 			payplans.jQuery.each(payplans.jQuery('.fieldFamilySex'), function() {
 				familyMembers.sex.push(payplans.jQuery(this).val());
 			});
-			payplans.jQuery.each(payplans.jQuery('input[name=bundle-u18-'+ i +'[]]:checked'), function() {
+			payplans.jQuery.each(payplans.jQuery('.fieldFamilyU18:checked'), function() {
 				familyMembers.u18.push(payplans.jQuery(this).val());
 			});
-			alert(count);
-			alert('u18: ' + familyMembers.u18);
 			//polymorph members object to children or adults respectively
 			for (var j = 0; j < count; j++) {
 				if (familyMembers.u18[j] === 'True') {
@@ -148,7 +146,7 @@
 				
 			}
 			
-//			payplans.apps.bundle.addParams(invoiceId, familyChildren, familyAdults);
+			payplans.apps.bundle.addParams(invoiceId, familyChildren, familyAdults);
 //			payplans.apps.bundle.calculatePricing(invoiceId, count );
 		});
 		
@@ -195,7 +193,6 @@
 		        answers = "none";
 		    }  
 		 
-		    alert(i);
 		     
 		    return false; //stop the completion of the order for debugging only
 		                                 
