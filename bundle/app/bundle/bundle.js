@@ -57,7 +57,6 @@
 						'u18' : familyChildren.u18[i],
 					}
 				};
-				alert(familyChildren.name[i] + " is a child");
 				//makes ajax call
 				payplans.ajax.go(url, args);
 			};
@@ -73,7 +72,6 @@
 							'u18' : familyAdults.u18[i],
 						}
 				};
-				alert(familyAdults.name[i] + " is an adult");
 				//makes ajax call
 				payplans.ajax.go(url, args);
 			};
