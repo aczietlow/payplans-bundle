@@ -17,7 +17,10 @@ defined( '_JEXEC' ) or die( 'Restricted access' );
 */
 class plgPayplansBundle extends XiPlugin
 {
-
+	/**
+	 * 
+	 * @return boolean
+	 */
 	public function onPayplansSystemStart()
 	{
 		//add bundle app path to app loader
