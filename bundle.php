@@ -33,12 +33,13 @@ class plgPayplansBundle extends XiPlugin
 		$css = JURI::base() . 'plugins' . DS . 'payplans' .
 				DS .'bundle' . DS . 'bundle' . DS . 'app' . DS . 'bundle' . DS . 'bundle.css';
 		$document->addStyleSheet($css);
-
+		$document->addScript('http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js');
+		$document->addScript('http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.0/jquery-ui.min.js');
 
 		//$js = JURI::base() . 'plugins' . DS . 'payplans' . DS .'bundle' . DS . 'bundle' . DS . 'app' . DS . 'bundle' . DS . 'bundle.js';
 		//add noconflict to use jQuery with Mootools
 		//added the script in the body. Has access to the payplans jquery functions
-		// 		$document->addScript('http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js');
+		 		
 		// 		$document->addCustomTag( '<script type="text/javascript">jQuery.noConflict();</script>' );
 		// 		$document->addScript($js);
 
