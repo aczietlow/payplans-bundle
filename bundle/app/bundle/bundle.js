@@ -150,12 +150,45 @@
 		
 		//add 1 add family field set
 		payplans.jQuery('#pp-custom-addFamily').click(function() {
+			
+			//day select input for dob
+			dobDay = '';
+			for (var x =1; x <= 31; x++ ) {
+				dobDay = dobDay + '<option value="' + x + '">' + x + '</option>';
+			}
+			
+			//year select input for dob
+			dobYear = '';
+			for (var x =2013; x >= 1900 ; x-- ) {
+				dobYear = dobYear + '<option value="' + x + '">' + x + '</option>';
+			}
+			
 			payplans.jQuery('<div class="field">' +
 					'<label>Family Member Name</label><input type="text" class="fieldFamilyName" name="bundle[]" value="' + i + '" /><br />'+
 					'<label>Sex| </label>' +
 					'<label>Male</label><input type="radio" class="fieldFamilySex" name="bundle-sex-' + i + '[]" value="M" />'+
 					'<label>Female</label><input type="radio" class="fieldFamilySex" name="bundle-sex-' + i + '[]" value="F" /><br />'+
-					'<label>Date of Birth</label><input type="text" class="fieldFamilyDOB" name="bundle-dob[]" value="' + i + '" /><br />'+
+					'<label>Date of Birth</label><select class="fieldFamilyDOB-month" name="bundle-dob[month]">' +
+						'<option value="01">Jan</option>' +
+						'<option value="02">Feb</option>' +
+						'<option value="03">March</option>' +
+						'<option value="04">April</option>' +
+						'<option value="05">May</option>' +
+						'<option value="06">June</option>' +
+						'<option value="07">July</option>' +
+						'<option value="08">Aug</option>' +
+						'<option value="09">Sept</option>' +
+						'<option value="10">Oct</option>' +
+						'<option value="11">Nov</option>' +
+						'<option value="12">Dec</option>' +
+					'</select>'+
+					'<select class="fieldFamilyDOB-day" name="bundle-dob[day]">' +
+						dobDay +
+					'</select>' +
+					'<select class="fieldFamilyDOB-year" name="bundle-dob[year]">' +
+						dobYear +
+					'</select><br />' +
+						
 					'<label>Under 18 | </label>' +
 					'<label>Yes</label><input type="radio" class="fieldFamilyU18" name="bundle-u18-' + i + '[]" value="True" />'+
 					'<label>No</label><input type="radio" class="fieldFamilyU18" name="bundle-u18-' + i + '[]" value="False" /><br /><hr />'+
