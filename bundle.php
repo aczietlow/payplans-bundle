@@ -18,7 +18,7 @@ defined( '_JEXEC' ) or die( 'Restricted access' );
 class plgPayplansBundle extends XiPlugin
 {
 	/**
-	 * 
+	 * loader function, used to load apps, stylesheets, and javascript
 	 * @return boolean
 	 */
 	public function onPayplansSystemStart()
@@ -50,7 +50,14 @@ class plgPayplansBundle extends XiPlugin
 			
 		return true;
 	}
-
+	
+	/**
+	 * Hooks invoice before view is rendered.
+	 * 
+	 * @param XiView $view
+	 * @param unknown $task
+	 * @return multitype:string
+	 */
 	public function onPayplansViewBeforeRender(XiView $view, $task)
 	{
 		//change the price of plans (View only?)
@@ -130,7 +137,21 @@ class plgPayplansBundle extends XiPlugin
 		$invoice->refresh()->save();
 	}
 
-	public function onPayplansInvoiceAddChildren($invoiceId, $familyName, $dob, $sex, $u18) {
+	/**
+	 * Adds child family members to the invoice object.
+	 * 
+	 * @param int $invoiceId
+	 * the invoice_id used to reference the invoice
+	 * @param string $familyName
+	 * name of the family member
+	 * @param string $dob
+	 * date choosen by jquery ui datepicker
+	 * @param enum $sex
+	 * sex of family member. either M or F
+	 * @param int $age
+	 * the age of the family member
+	 */
+	public function onPayplansInvoiceAddChildren($invoiceId, $familyName, $dob, $sex, $age) {
 		$invoice = PayplansApi::getInvoice($invoiceId);
 		$famillyMembers = $invoice->getParam('familyChildren');
 		
@@ -141,11 +162,7 @@ class plgPayplansBundle extends XiPlugin
 				'familyName' => $familyName,
 				'dob' => $dob,
 				'sex' => $sex,
-				'u18' => $u18,
-				);
-		$test = array(
-				'cars' => array(0 => 'porse', 1 => 'vw', 2 => 'ford'),
-				'trucks' => array(0 => 'GM',1 => 'Ford', 2 => 'Chevy'),
+				'age' => $age,
 				);
 		
 		$invoice->setParam('familyChildren', 'test');
@@ -153,7 +170,7 @@ class plgPayplansBundle extends XiPlugin
 		$invoice->refresh()->save();
 	}
 	
-	public function onPayplansInvoiceAddAdult($invoiceId, $familyName, $dob, $sex, $u18) {
+	public function onPayplansInvoiceAddAdult($invoiceId, $familyName, $dob, $sex, $age) {
 		$invoice = PayplansApi::getInvoice($invoiceId);
 
 		$invoice->setParam('familyAdult', $invoiceId);
