@@ -145,7 +145,7 @@
 			}
 			
 			payplans.apps.bundle.addParams(invoiceId, familyChildren, familyAdults);
-			payplans.apps.bundle.calculatePricing(invoiceId, count );
+//			payplans.apps.bundle.calculatePricing(invoiceId, count );
 		});
 		
 		//add 1 add family field set
