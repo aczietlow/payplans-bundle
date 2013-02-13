@@ -1,0 +1,6 @@
+#trigger events from the submit button
+#store family members associated with plans
+#add family members to subscription plan view
+#add family members to subscription plan admin view
+
+#add form validation
