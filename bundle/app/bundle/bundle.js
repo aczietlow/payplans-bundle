@@ -76,12 +76,7 @@
 //				alert (familyAdults.name[i] + " is an adult");
 				payplans.ajax.go(url, args);
 			};
-			
-			
-		
 		},
-		
-
 	};
 	
 

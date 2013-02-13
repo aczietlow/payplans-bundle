@@ -39,7 +39,7 @@ class plgPayplansBundle extends XiPlugin
 		//$js = JURI::base() . 'plugins' . DS . 'payplans' . DS .'bundle' . DS . 'bundle' . DS . 'app' . DS . 'bundle' . DS . 'bundle.js';
 		//add noconflict to use jQuery with Mootools
 		//added the script in the body. Has access to the payplans jquery functions
-		 		
+		 
 		// 		$document->addCustomTag( '<script type="text/javascript">jQuery.noConflict();</script>' );
 		// 		$document->addScript($js);
 
@@ -50,10 +50,10 @@ class plgPayplansBundle extends XiPlugin
 			
 		return true;
 	}
-	
+
 	/**
 	 * Hooks invoice before view is rendered.
-	 * 
+	 *
 	 * @param XiView $view
 	 * @param unknown $task
 	 * @return multitype:string
@@ -88,9 +88,9 @@ class plgPayplansBundle extends XiPlugin
 							</div>
 							</div>
 							";
-			
-			
-			
+				
+				
+				
 			var_dump($invoice->getParam('familyChildren'));
 			var_dump("Adult: " . $invoice->getParam('familyAdult'));
 			return array('pp-subscription-details' => $html);
@@ -139,7 +139,7 @@ class plgPayplansBundle extends XiPlugin
 
 	/**
 	 * Adds child family members to the invoice object.
-	 * 
+	 *
 	 * @param int $invoiceId
 	 * the invoice_id used to reference the invoice
 	 * @param string $familyName
@@ -151,31 +151,34 @@ class plgPayplansBundle extends XiPlugin
 	 * @param int $age
 	 * the age of the family member
 	 */
+	//#TODO check database for dublicate records
+	//#TODO create table on install on app (#__payplans_bundle)
 	public function onPayplansInvoiceAddChildren($invoiceId, $familyName, $dob, $sex, $age) {
-		$invoice = PayplansApi::getInvoice($invoiceId);
-		$famillyMembers = $invoice->getParam('familyChildren');
-		
-		$i = array_count_values($familyMembers);
-		$i++;
-		
-		$familyMembers[$i] = array(
-				'familyName' => $familyName,
-				'dob' => $dob,
-				'sex' => $sex,
-				'age' => $age,
-				);
-		
-		$invoice->setParam('familyChildren', 'test');
+// 		$invoice = PayplansApi::getInvoice($invoiceId);
 
-		$invoice->refresh()->save();
+		$db = JFactory::getDBO();
+
+		$familyMember = new stdClass();
+		$familyMember->invoice_id = $invoiceId;
+		$familyMember->family_name = $familyName;
+		$familyMember->dob = $dob;
+		$familyMember->sex = $sex;
+		$familyMember->age = $age;
+
+		$db->insertObject('#__bundle', $familyMember);
 	}
-	
+
 	public function onPayplansInvoiceAddAdult($invoiceId, $familyName, $dob, $sex, $age) {
-		$invoice = PayplansApi::getInvoice($invoiceId);
+		$db = JFactory::getDBO();
 
-		$invoice->setParam('familyAdult', $invoiceId);
+		$familyMember = new stdClass();
+		$familyMember->invoice_id = $invoiceId;
+		$familyMember->family_name = $familyName;
+		$familyMember->dob = $dob;
+		$familyMember->sex = $sex;
+		$familyMember->age = $age;
 
-		$invoice->refresh()->save();
+		$db->insertObject('#__bundle', $familyMember);
 	}
 
 }
