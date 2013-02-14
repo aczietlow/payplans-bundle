@@ -39,7 +39,7 @@ class plgPayplansBundle extends XiPlugin
 		//$js = JURI::base() . 'plugins' . DS . 'payplans' . DS .'bundle' . DS . 'bundle' . DS . 'app' . DS . 'bundle' . DS . 'bundle.js';
 		//add noconflict to use jQuery with Mootools
 		//added the script in the body. Has access to the payplans jquery functions
-		 
+			
 		// 		$document->addCustomTag( '<script type="text/javascript">jQuery.noConflict();</script>' );
 		// 		$document->addScript($js);
 
@@ -88,11 +88,10 @@ class plgPayplansBundle extends XiPlugin
 							</div>
 							</div>
 							";
-				
-				
-				
+
+
+
 			var_dump($invoice->getParam('familyChildren'));
-			var_dump("Adult: " . $invoice->getParam('familyAdult'));
 			return array('pp-subscription-details' => $html);
 		}
 
@@ -106,8 +105,10 @@ class plgPayplansBundle extends XiPlugin
 	 * @param int $invoiceId
 	 * Invoice id used for querying the invoice whose price will be updated.
 	 */
-	public function onPayplansInvoiceUpdatePricing($invoiceId, $familyMembers) {
+	//#TODO change fix amount to variable amount set during instantiation of app
+	public function onPayplansInvoiceUpdatePricing($invoiceId, $familyChildren, $familyAdults) {
 
+		//prevent a signed number being passed.
 		// 		if ($familyChildren < 0) {
 		// 			$familyChildren = 0;
 		// 		}
@@ -151,34 +152,114 @@ class plgPayplansBundle extends XiPlugin
 	 * @param int $age
 	 * the age of the family member
 	 */
-	//#TODO check database for dublicate records
 	//#TODO create table on install on app (#__payplans_bundle)
+	//#TODO update #__bundle to #__payplans_bundle (see above)
 	public function onPayplansInvoiceAddChildren($invoiceId, $familyName, $dob, $sex, $age) {
-// 		$invoice = PayplansApi::getInvoice($invoiceId);
-
+		$invoice = PayplansApi::getInvoice($invoiceId);
 		$db = JFactory::getDBO();
 
-		$familyMember = new stdClass();
-		$familyMember->invoice_id = $invoiceId;
-		$familyMember->family_name = $familyName;
-		$familyMember->dob = $dob;
-		$familyMember->sex = $sex;
-		$familyMember->age = $age;
+		$query = $db->getQuery(true);
 
-		$db->insertObject('#__bundle', $familyMember);
+		$query
+		->select(array('*'))
+		->from('#__bundle')
+		->where("invoice_id = '$invoice_id'")
+		->where("family_name ='$familyName'")
+		->where("dob = '$dob'")
+		->where("sex = '$sex'")
+		->where("age = '$age'")
+		->order('invoice_id');
+
+		$db->setQuery($query);
+
+		try {
+			$result = $db->loadObjectList();
+		} catch (Exception $e) {
+			$invoice->setParam('Error', $e->getMessage(). " on line" . $e->getLine());
+		}
+
+		if (!empty($result)){
+			$invoice->setParam('Error', "A record for that family member already exists");
+		} else {
+			$familyMember = new stdClass();
+			$familyMember->invoice_id = $invoiceId;
+			$familyMember->family_name = $familyName;
+			$familyMember->dob = $dob;
+			$familyMember->sex = $sex;
+			$familyMember->age = $age;
+				
+			JFactory::getDBO()->insertObject('#__bundle', $familyMember);
+		}
+		
+		$numberOfChildren = $invoice->getParam('familyChildren');
+		$invoice->setParam('familyChildren', $numberOfChildren++);
+
+		//update the invoice object
+		$invoice->refresh()->save();
+
+
 	}
-
+	
+	/**
+	 * Adds Adult family members to the invoice object.
+	 *
+	 * @param int $invoiceId
+	 * the invoice_id used to reference the invoice
+	 * @param string $familyName
+	 * name of the family member
+	 * @param string $dob
+	 * date choosen by jquery ui datepicker
+	 * @param enum $sex
+	 * sex of family member. either M or F
+	 * @param int $age
+	 * the age of the family member
+	 */
+	//#TODO create table on install on app (#__payplans_bundle)
+	//#TODO update #__bundle to #__payplans_bundle (see above)
 	public function onPayplansInvoiceAddAdult($invoiceId, $familyName, $dob, $sex, $age) {
+		$invoice = PayplansApi::getInvoice($invoiceId);
 		$db = JFactory::getDBO();
 
-		$familyMember = new stdClass();
-		$familyMember->invoice_id = $invoiceId;
-		$familyMember->family_name = $familyName;
-		$familyMember->dob = $dob;
-		$familyMember->sex = $sex;
-		$familyMember->age = $age;
+		$query = $db->getQuery(true);
 
-		$db->insertObject('#__bundle', $familyMember);
+		$query
+		->select(array('*'))
+		->from('#__bundle')
+		->where("invoice_id = '$invoice_id'")
+		->where("family_name ='$familyName'")
+		->where("dob = '$dob'")
+		->where("sex = '$sex'")
+		->where("age = '$age'")
+		->order('invoice_id');
+
+		$db->setQuery($query);
+
+		try {
+			$result = $db->loadObjectList();
+		} catch (Exception $e) {
+			$invoice->setParam('Error', $e->getMessage(). " on line" . $e->getLine());
+		}
+
+		if (!empty($result)){
+			$invoice->setParam('Error', "A record for that family member already exists");
+		} else {
+			$familyMember = new stdClass();
+			$familyMember->invoice_id = $invoiceId;
+			$familyMember->family_name = $familyName;
+			$familyMember->dob = $dob;
+			$familyMember->sex = $sex;
+			$familyMember->age = $age;
+				
+			JFactory::getDBO()->insertObject('#__bundle', $familyMember);
+		}
+		
+		$numberOfAdults = $invoice->getParam('familyAdults');
+		$invoice->setParam('familyAdults', $numberOfAdults++);
+
+		//update the invoice object
+		$invoice->refresh()->save();
+
+		
 	}
 
 }

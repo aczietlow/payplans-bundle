@@ -15,14 +15,14 @@
 		 * @param int familyMembers
 		 * The number of family members that have been added to the subscription.
 		 */
-		calculatePricing : function(invoiceId, familyMembers) {
+		calculatePricing : function(invoiceId, familyChildren, familyAdults) {
 			
 			var url = "index.php?option=com_payplans&view=invoice&task=trigger&event=onPayplansInvoiceUpdatePricing";
 			var args = {
 				'event_args' : {
 					'invoiceId' : invoiceId,
-					'familyChildren' : familyMembers,
-					//'familyAdult'	: array,
+					'familyChildren' : familyChildren,
+					'familyAdult' : familyAdults,
 				}
 			};
 			//makes ajax call
@@ -139,7 +139,6 @@
 					familyAdults.dob.push(familyMembers.dob[j]);
 					familyAdults.age.push(familyMembers.age[j]);
 				}
-				
 			}
 			
 			//calls ajax triggers to php class
@@ -154,7 +153,7 @@
 			payplans.jQuery('<div class="field">' +
 					'<label>Family Member Name</label><input type="text" class="fieldFamilyName" name="bundle[]" value="' + i + '" /><br />'+
 					'<label>Sex| </label>' +
-					'<label>Male</label><input type="radio" class="fieldFamilySex" name="bundle-sex-' + i + '[]" value="M" />'+
+					'<label>Male</label><input type="radio" class="fieldFamilySex radiobtn rokradios roksubscription_detailsex rokradios-active ui-state-active ui-button ui-widget ui-state-default ui-button-text-only ui-corner-left" name="bundle-sex-' + i + '[]" value="M" />'+
 					'<label>Female</label><input type="radio" class="fieldFamilySex" name="bundle-sex-' + i + '[]" value="F" /><br />'+
 					'<label>Date of Birth</label><input type="text" id="datepicker" class="fieldFamilyDOB" name="bundle-dob[]" /><br />'+
 					'</div>').fadeIn('slow').appendTo('.pp-app-bundle-inputs');
