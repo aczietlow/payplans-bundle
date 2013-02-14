@@ -1,6 +1,15 @@
-#trigger events from the submit button
-#store family members associated with plans
-#add family members to subscription plan view
-#add family members to subscription plan admin view
+week of 2-11
+add family members to subscription plan view
+add family members to subscription plan admin view
+change trigger to submit button
+style form
+add user input field to $$ amount for each instance of app.
+create db on App installation
+add form validation (javascript)
 
-#add form validation
+#calculate age using jquery date picker string
+#create table for storing family members
+#write family members data to table
+#check db for duplicate records
+#use jquery ui date picker instead of manually creating date fields
+#replace u18 property witha age

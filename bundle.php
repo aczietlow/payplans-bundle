@@ -249,7 +249,7 @@ class plgPayplansBundle extends XiPlugin
 			$familyMember->dob = $dob;
 			$familyMember->sex = $sex;
 			$familyMember->age = $age;
-				
+
 			JFactory::getDBO()->insertObject('#__bundle', $familyMember);
 		}
 		
