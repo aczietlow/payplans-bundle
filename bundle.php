@@ -51,6 +51,7 @@ class plgPayplansBundle extends XiPlugin
 		return true;
 	}
 
+	
 	/**
 	 * Hooks invoice before view is rendered.
 	 *
@@ -60,9 +61,15 @@ class plgPayplansBundle extends XiPlugin
 	 */
 	public function onPayplansViewBeforeRender(XiView $view, $task)
 	{
+		$layout  =  'orderconfirm';
+		
 		//change the price of plans (View only?)
 		if(($view instanceof PayplanssiteViewPlan) && $task == 'subscribe')
 		{
+// 			$itemid       = $view->getModel()->getId();
+// 			$orderId 	  = PayplansInvoice::getInstance($itemid)->getObjectId();
+// 			$subscription = PayplansOrder::getInstance($orderId)->getSubscription();
+// 			return self::renderBundle($layout);
 		}
 
 		//if user is not logged in then display the modified price on login page
@@ -73,31 +80,16 @@ class plgPayplansBundle extends XiPlugin
 		//If user is logged in and confirming payment task
 		if(($view instanceof PayplanssiteViewInvoice && $task == 'confirm') || ($view instanceof PayplansadminViewInvoice && $task == 'edit'))
 		{
-			$invoiceId = $view->getModel()->getId();
-			$invoice = PayplansApi::getInvoice($invoiceId);
-
-			$payplans_js = "<script src='" . PayplansHelperUtils::pathFS2URL(dirname(__FILE__).DS. 'bundle' . DS . 'app' . DS . 'bundle' . DS . 'bundle.js') ."' type='text/javascript'></script>";
-			$html = $payplans_js . "
-					<div class ='pp-app-bundle'>
-					<button id='pp-custom-calculate' type='button'>add to total</button><br />
-					<button id='pp-custom-addFamily' type='button'>Add</button>
-					<button id='pp-custom-removeFamily' type='button'>Remove</button>
-					<button id='pp-custom-resetFamily' type='button'>Reset</button>
-					<div class='pp-app-bundle-inputs'>
-					<input type='hidden' name='invoiceId' value='". $invoiceId ."'/>
-							</div>
-							</div>
-							";
-
-
-
-			var_dump($invoice->getParam('familyChildren'));
-			return array('pp-subscription-details' => $html);
+			$itemId = $view->getModel()->getId();
+			$invoice = PayplansApi::getInvoice($itemId);
+			
+			return self::renderBundle($invoice, $layout);
 		}
 
 		//view of subscription invoice.
 		if (($view instanceof PayplanssiteViewPayment) && $task == 'pay')
 		{
+			
 		}
 	}
 	/**
@@ -148,7 +140,7 @@ class plgPayplansBundle extends XiPlugin
 	 * @param string $dob
 	 * date choosen by jquery ui datepicker
 	 * @param enum $sex
-	 * sex of family member. either M or F
+	 * (M male, F female) Sex of the family member
 	 * @param int $age
 	 * the age of the family member
 	 */
@@ -168,7 +160,7 @@ class plgPayplansBundle extends XiPlugin
 		->where("dob = '$dob'")
 		->where("sex = '$sex'")
 		->where("age = '$age'")
-		->order('invoice_id');
+		->order('id');
 
 		$db->setQuery($query);
 
@@ -177,8 +169,9 @@ class plgPayplansBundle extends XiPlugin
 		} catch (Exception $e) {
 			$invoice->setParam('Error', $e->getMessage(). " on line" . $e->getLine());
 		}
-
-		if (!empty($result)){
+		
+		//logic check fails
+		if (mysql_num_rows($result) > 0){
 			$invoice->setParam('Error', "A record for that family member already exists");
 		} else {
 			$familyMember = new stdClass();
@@ -230,7 +223,7 @@ class plgPayplansBundle extends XiPlugin
 		->where("dob = '$dob'")
 		->where("sex = '$sex'")
 		->where("age = '$age'")
-		->order('invoice_id');
+		->order('id');
 
 		$db->setQuery($query);
 
@@ -261,5 +254,30 @@ class plgPayplansBundle extends XiPlugin
 
 		
 	}
+	
+	public function renderBundle($invoice, $layout, $appid = 0) {
+		
+
+		$payplans_js = "<script src='" . PayplansHelperUtils::pathFS2URL(dirname(__FILE__).DS. 'bundle' . DS . 'app' . DS . 'bundle' . DS . 'bundle.js') ."' type='text/javascript'></script>";
+		$html = $payplans_js . "
+					<div class ='pp-app-bundle'>
+					<button id='pp-custom-calculate' type='button'>add to total</button><br />
+					<button id='pp-custom-addFamily' type='button'>Add</button>
+					<button id='pp-custom-removeFamily' type='button'>Remove</button>
+					<button id='pp-custom-resetFamily' type='button'>Reset</button>
+					<div class='pp-app-bundle-inputs'>
+					<input type='hidden' name='invoiceId' value='". $invoice->getId() ."'/>
+					</div>
+					</div>
+							";
+		
+		
+		
+// 		var_dump($invoice->getParam('Error'));
+// 		return array('pp-subscription-details' => $html);
+		
+		return array('pp-subscription-details' => $this->_render($layout));
+	}
+	
 
 }
