@@ -270,6 +270,7 @@ class plgPayplansBundle extends XiPlugin
 		$payplans_js = "<script src='" . PayplansHelperUtils::pathFS2URL(dirname(__FILE__).DS. 'bundle' . DS . 'app' . DS . 'bundle' . DS . 'bundle.js') ."' type='text/javascript'></script>";
 		$html = $payplans_js . "
 					<div class ='pp-app-bundle'>
+					<h4> Additional Family Members </h4>
 					<button id='pp-custom-calculate' type='button'>add to total</button><br />
 					<button id='pp-custom-addFamily' type='button'>Add</button>
 					<button id='pp-custom-removeFamily' type='button'>Remove</button>
@@ -281,7 +282,7 @@ class plgPayplansBundle extends XiPlugin
 							";
 		
 		var_dump($invoice->getParam('Error'));
-		return array('pp-subscription-details' => $html);
+		return array('pp-bundle-details' => $html);
 
 		//breaks the system as of right now
 // 		return array('pp-subscription-details' => $this->_render($layout));
