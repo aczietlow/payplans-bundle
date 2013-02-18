@@ -80,6 +80,10 @@ class plgPayplansBundle extends XiPlugin
 		//If user is logged in and confirming payment task
 		if(($view instanceof PayplanssiteViewInvoice && $task == 'confirm') || ($view instanceof PayplansadminViewInvoice && $task == 'edit'))
 		{
+		}
+		//When data needs to be displayed in the backend
+		if(($view instanceof PayplanssiteViewInvoice && $task == 'confirm') || ($view instanceof PayplansadminViewInvoice && $task == 'edit'))
+		{
 			$itemId = $view->getModel()->getId();
 			$invoice = PayplansApi::getInvoice($itemId);
 			
@@ -91,6 +95,8 @@ class plgPayplansBundle extends XiPlugin
 		{
 			
 		}
+		
+		return false;
 	}
 	/**
 	 * custom pricing update trigger. Is triggered via ajax call from bundle.js
@@ -275,8 +281,9 @@ class plgPayplansBundle extends XiPlugin
 		
 // 		var_dump($invoice->getParam('Error'));
 // 		return array('pp-subscription-details' => $html);
-		
-		return array('pp-subscription-details' => $this->_render($layout));
+		//breaks the system as of right now
+// 		return array('pp-subscription-details' => $this->_render($layout));
+// 		$this->_render($layout);
 	}
 	
 
