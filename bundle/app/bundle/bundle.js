@@ -114,16 +114,14 @@
 			payplans.jQuery.each(payplans.jQuery('.fieldFamilyName'), function() {
 		        familyMembers.name.push(payplans.jQuery(this).val());
 		    });
-			payplans.jQuery.each(payplans.jQuery('.fieldFamilySex'), function() {
+			payplans.jQuery.each(payplans.jQuery('.fieldFamilySex:checked'), function() {
 				familyMembers.sex.push(payplans.jQuery(this).val());
-			});
-			payplans.jQuery.each(payplans.jQuery('.fieldFamilyU18:checked'), function() {
-				
 			});
 			payplans.jQuery.each(payplans.jQuery('.fieldFamilyDOB'), function() {
 				familyMembers.dob.push(payplans.jQuery(this).val());
 				familyMembers.age.push(calcAge(payplans.jQuery(this).val()));
 			});
+			
 			
 			//polymorph members object to children or adults respectively
 			for (var j = 0; j < count; j++) {
@@ -159,27 +157,35 @@
 					'<span class="pp-grid_8 pp-col pp-input">' +
 					'<input type="text" class="fieldFamilyName" name="bundle[]" value="Chris" />'+
 					'</span>' +
+					'</div>' +
+					'</div>' +
 					
+					'<div class="pp-parameter">' +
+					'<div class="pp-row">' +
 					'<span class="pp-grid_4 pp-col pp-label">' +
 					'<label>Sex</label>' +
 					'</span>' +
-					
 					'<span class="pp-grid_8 pp-col pp-input">' +
 					'<label id="subscription_detailsexM" >Male</label>'+
-					'<input type="radio" id="pp-bundle-detailsexM" name="bundle-sex-' + i + '[]" value="M"/>'+
+					'<input type="radio" class="fieldFamilySex" id="pp-bundle-detailsexM" name="bundle-sex-' + i + '[]" value="M"/>'+
 					'<label id="subscription_detailsexF" >Female</label>'+
-					'<input type="radio" id="pp-bundle-detailsexF" name="bundle-sex-' + i + '[]" value="F"/>'+
+					'<input type="radio" class="fieldFamilySex" id="pp-bundle-detailsexF" name="bundle-sex-' + i + '[]" value="F"/>'+
 					'</span>' +
-			
+					'</div>' +
+					'</div>' +
+					
+					'<div class="pp-parameter">' +
+					'<div class="pp-row">' +
 					'<span class="pp-grid_4 pp-col pp-label">' +
 					'<label>Date of Birth</label>' +
 					'</span>' +
 					'<span class="pp-grid_8 pp-col pp-input">' +
 					'<input type="text" id="datepicker" class="fieldFamilyDOB" name="bundle-dob[]" value="02/01/2010" />'+
 					'</span>' +
+					'</div>' +
+					'</div>' +
 
-					'</div>' +
-					'</div>' +
+					
 					'</div>').fadeIn('slow').appendTo('.pp-app-bundle-inputs');
 			//applies the datepicker to the dob field
 			 jQuery( "#datepicker" ).datepicker({
