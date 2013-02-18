@@ -151,11 +151,35 @@
 			
 			//html of fieldset
 			payplans.jQuery('<div class="field">' +
-					'<label>Family Member Name</label><input type="text" class="fieldFamilyName" name="bundle[]" value="Chris" /><br />'+
-					'<label>Sex| </label>' +
-					'<label>Male</label><input type="radio" class="fieldFamilySex" name="bundle-sex-' + i + '[]" value="M" />'+
-					'<label>Female</label><input type="radio" class="fieldFamilySex" name="bundle-sex-' + i + '[]" value="F" /><br />'+
-					'<label>Date of Birth</label><input type="text" id="datepicker" class="fieldFamilyDOB" name="bundle-dob[]" value="02/01/2010" /><br />'+
+					'<div class="pp-parameter">' +
+					'<div class="pp-row">' +
+					'<span class="pp-grid_4 pp-col pp-label">' +
+					'<label>Name</label>' +
+					'</span>' +
+					'<span class="pp-grid_8 pp-col pp-input">' +
+					'<input type="text" class="fieldFamilyName" name="bundle[]" value="Chris" />'+
+					'</span>' +
+					
+					'<span class="pp-grid_4 pp-col pp-label">' +
+					'<label>Sex</label>' +
+					'</span>' +
+					
+					'<span class="pp-grid_8 pp-col pp-input">' +
+					'<label id="subscription_detailsexM" >Male</label>'+
+					'<input type="radio" id="pp-bundle-detailsexM" name="bundle-sex-' + i + '[]" value="M"/>'+
+					'<label id="subscription_detailsexF" >Female</label>'+
+					'<input type="radio" id="pp-bundle-detailsexF" name="bundle-sex-' + i + '[]" value="F"/>'+
+					'</span>' +
+			
+					'<span class="pp-grid_4 pp-col pp-label">' +
+					'<label>Date of Birth</label>' +
+					'</span>' +
+					'<span class="pp-grid_8 pp-col pp-input">' +
+					'<input type="text" id="datepicker" class="fieldFamilyDOB" name="bundle-dob[]" value="02/01/2010" />'+
+					'</span>' +
+
+					'</div>' +
+					'</div>' +
 					'</div>').fadeIn('slow').appendTo('.pp-app-bundle-inputs');
 			//applies the datepicker to the dob field
 			 jQuery( "#datepicker" ).datepicker({
