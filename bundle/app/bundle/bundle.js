@@ -151,11 +151,11 @@
 			
 			//html of fieldset
 			payplans.jQuery('<div class="field">' +
-					'<label>Family Member Name</label><input type="text" class="fieldFamilyName" name="bundle[]" value="' + i + '" /><br />'+
+					'<label>Family Member Name</label><input type="text" class="fieldFamilyName" name="bundle[]" value="Chris" /><br />'+
 					'<label>Sex| </label>' +
-					'<label>Male</label><input type="radio" class="fieldFamilySex radiobtn rokradios roksubscription_detailsex rokradios-active ui-state-active ui-button ui-widget ui-state-default ui-button-text-only ui-corner-left" name="bundle-sex-' + i + '[]" value="M" />'+
+					'<label>Male</label><input type="radio" class="fieldFamilySex" name="bundle-sex-' + i + '[]" value="M" />'+
 					'<label>Female</label><input type="radio" class="fieldFamilySex" name="bundle-sex-' + i + '[]" value="F" /><br />'+
-					'<label>Date of Birth</label><input type="text" id="datepicker" class="fieldFamilyDOB" name="bundle-dob[]" /><br />'+
+					'<label>Date of Birth</label><input type="text" id="datepicker" class="fieldFamilyDOB" name="bundle-dob[]" value="02/01/2010" /><br />'+
 					'</div>').fadeIn('slow').appendTo('.pp-app-bundle-inputs');
 			//applies the datepicker to the dob field
 			 jQuery( "#datepicker" ).datepicker({

@@ -84,6 +84,7 @@ class plgPayplansBundle extends XiPlugin
 		//When data needs to be displayed in the backend
 		if(($view instanceof PayplanssiteViewInvoice && $task == 'confirm') || ($view instanceof PayplansadminViewInvoice && $task == 'edit'))
 		{
+			
 			$itemId = $view->getModel()->getId();
 			$invoice = PayplansApi::getInvoice($itemId);
 			
@@ -161,15 +162,15 @@ class plgPayplansBundle extends XiPlugin
 		$query
 		->select(array('*'))
 		->from('#__bundle')
-		->where("invoice_id = '$invoice_id'")
+		->where("invoice_id = '$invoiceId'")
 		->where("family_name ='$familyName'")
 		->where("dob = '$dob'")
 		->where("sex = '$sex'")
-		->where("age = '$age'")
-		->order('id');
+		->where("age = '$age'");
 
 		$db->setQuery($query);
-
+		
+		
 		try {
 			$result = $db->loadObjectList();
 		} catch (Exception $e) {
@@ -177,8 +178,8 @@ class plgPayplansBundle extends XiPlugin
 		}
 		
 		//logic check fails
-		if (mysql_num_rows($result) > 0){
-			$invoice->setParam('Error', "A record for that family member already exists");
+		if (count($result) > 0){
+			$invoice->setParam('Error', "A record for that family member already exists.");
 		} else {
 			$familyMember = new stdClass();
 			$familyMember->invoice_id = $invoiceId;
@@ -233,14 +234,16 @@ class plgPayplansBundle extends XiPlugin
 
 		$db->setQuery($query);
 
+		
+		
 		try {
 			$result = $db->loadObjectList();
 		} catch (Exception $e) {
 			$invoice->setParam('Error', $e->getMessage(). " on line" . $e->getLine());
 		}
 
-		if (!empty($result)){
-			$invoice->setParam('Error', "A record for that family member already exists");
+		if (count($result) > 0){
+			$invoice->setParam('Error', "A record for that family member already exists");	
 		} else {
 			$familyMember = new stdClass();
 			$familyMember->invoice_id = $invoiceId;
@@ -277,10 +280,9 @@ class plgPayplansBundle extends XiPlugin
 					</div>
 							";
 		
-		
-		
-// 		var_dump($invoice->getParam('Error'));
-// 		return array('pp-subscription-details' => $html);
+		var_dump($invoice->getParam('Error'));
+		return array('pp-subscription-details' => $html);
+
 		//breaks the system as of right now
 // 		return array('pp-subscription-details' => $this->_render($layout));
 // 		$this->_render($layout);
