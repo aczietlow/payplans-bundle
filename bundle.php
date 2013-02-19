@@ -84,7 +84,7 @@ class plgPayplansBundle extends XiPlugin
 		//When data needs to be displayed in the backend
 		if(($view instanceof PayplanssiteViewInvoice && $task == 'confirm') || ($view instanceof PayplansadminViewInvoice && $task == 'edit'))
 		{
-			
+			$foo = 'test';	
 			$itemId = $view->getModel()->getId();
 			$invoice = PayplansApi::getInvoice($itemId);
 			

@@ -225,7 +225,7 @@
 		    }  
 		 
 		     
-		    return false; //stop the completion of the order for debugging only
+		   // return false; //stop the completion of the order for debugging only
 		                                 
 		    });
 	});
