@@ -36,18 +36,6 @@ class plgPayplansBundle extends XiPlugin
 		$document->addScript('http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js');
 		$document->addScript('http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.0/jquery-ui.min.js');
 
-		//$js = JURI::base() . 'plugins' . DS . 'payplans' . DS .'bundle' . DS . 'bundle' . DS . 'app' . DS . 'bundle' . DS . 'bundle.js';
-		//add noconflict to use jQuery with Mootools
-		//added the script in the body. Has access to the payplans jquery functions
-			
-		// 		$document->addCustomTag( '<script type="text/javascript">jQuery.noConflict();</script>' );
-		// 		$document->addScript($js);
-
-		//  		$js_test = JURI::base() . 'plugins' . DS . 'payplans' . DS .'bundle' . DS . 'bundle' . DS . 'app' . DS . 'bundle' . DS . 'test.js';
-		//  		PayplansHtml::script($js_test);
-		//yplansHtml::s
-
-			
 		return true;
 	}
 
@@ -62,32 +50,27 @@ class plgPayplansBundle extends XiPlugin
 	public function onPayplansViewBeforeRender(XiView $view, $task)
 	{
 
-		if(($view instanceof PayplanssiteViewSubscription) && $task == 'display')
+		if($view instanceof PayplanssiteViewSubscription && $task == 'display')
 		{
 			$tmpl = 'subscription_edit';
 			$itemId = $view->getModel()->getId();
 			$invoice = PayplansApi::getInvoice($itemId);
-			$subscription = PayplansSubscription::getInstance($itemId);
 			$invoiceId = $invoice->getId();
+			$subscriptionApp  = new PayplansAppBundle();
+
+			$db = JFactory::getDBO();
+
+			$query = $db->getQuery(true);
+
+			$query
+			->select(array('*'))
+			->from('#__bundle')
+			->where("invoice_id = 211");
+
+			$db->setQuery($query);
+			$results = $db->loadObjectList();
 			
-			$subscriptionApp  = new PayplansAppSubscriptiondetail();
-// 			return $subscriptionApp->renderWidget($subscription, $tmpl);
-			
-// 			$db = JFactory::getDBO();
-
-// 			$query = $db->getQuery(true);
-
-// 			$query
-// 			->select(array('*'))
-// 			->from('#__bundle')
-// 			->where("invoice_id = 211");
-
-// 			$db->setQuery($query);
-// 			$results = $db->loadObjectList();
-
-			$this->_assign('test', 'success');
-			return $this->_render($tmpl);
-// 			return '<h1>testtttt</h1>';
+			return $subscriptionApp->renderWidget($results, $tmpl);
 		}
 
 		if(($view instanceof PayplanssiteViewInvoice && $task == 'confirm') || ($view instanceof PayplansadminViewInvoice && $task == 'edit'))

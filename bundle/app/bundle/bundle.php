@@ -48,6 +48,18 @@ class PayplansAppBundle extends PayplansApp {
 		
 	}
 	
+	function renderWidget($results, $tmpl)
+	{
+		$user = XiFactory::getUser();
+		if(!$user->id){
+			return false;
+		}
+	
+		$this->assign('results', $results);
+		return array('pp-subscription-details' => $this->_render($tmpl));
+		
+	}
+	
 
 	/**
 
