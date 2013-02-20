@@ -49,7 +49,6 @@ class PayplansAppBundle extends PayplansApp {
 	}
 	
 
-
 	/**
 
 	Available events

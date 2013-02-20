@@ -88,7 +88,11 @@ class plgPayplansBundle extends XiPlugin
 			$itemId = $view->getModel()->getId();
 			$invoice = PayplansApi::getInvoice($itemId);
 			
-			return self::renderBundle($invoice, $layout);
+			$html = $this->renderBundleHtml($invoice);
+			
+			$this->_assign('html', $html);
+			
+			return $this->_render($layout);
 		}
 
 		//view of subscription invoice.
@@ -264,7 +268,7 @@ class plgPayplansBundle extends XiPlugin
 		
 	}
 	
-	public function renderBundle($invoice, $layout, $appid = 0) {
+	public function renderBundleHtml($invoice, $appid = 0) {
 		
 
 		$payplans_js = "<script src='" . PayplansHelperUtils::pathFS2URL(dirname(__FILE__).DS. 'bundle' . DS . 'app' . DS . 'bundle' . DS . 'bundle.js') ."' type='text/javascript'></script>";
@@ -280,9 +284,7 @@ class plgPayplansBundle extends XiPlugin
 					</div>
 					</div>
 							";
-		
-		var_dump($invoice->getParam('Error'));
-		return array('pp-bundle-details' => $html);
+		return $html;
 
 		//breaks the system as of right now
 // 		return array('pp-subscription-details' => $this->_render($layout));
