@@ -51,7 +51,7 @@ class plgPayplansBundle extends XiPlugin
 		return true;
 	}
 
-	
+
 	/**
 	 * Hooks invoice before view is rendered.
 	 *
@@ -61,46 +61,49 @@ class plgPayplansBundle extends XiPlugin
 	 */
 	public function onPayplansViewBeforeRender(XiView $view, $task)
 	{
-		$layout  =  'orderconfirm';
-		
-		//change the price of plans (View only?)
-		if(($view instanceof PayplanssiteViewPlan) && $task == 'subscribe')
-		{
-// 			$itemid       = $view->getModel()->getId();
-// 			$orderId 	  = PayplansInvoice::getInstance($itemid)->getObjectId();
-// 			$subscription = PayplansOrder::getInstance($orderId)->getSubscription();
-// 			return self::renderBundle($layout);
-		}
 
-		//if user is not logged in then display the modified price on login page
-		if(($view instanceof PayplanssiteViewPlan) && $task == 'login')
+		if(($view instanceof PayplanssiteViewSubscription) && $task == 'display')
 		{
-		}
-
-		//If user is logged in and confirming payment task
-		if(($view instanceof PayplanssiteViewInvoice && $task == 'confirm') || ($view instanceof PayplansadminViewInvoice && $task == 'edit'))
-		{
-		}
-		//When data needs to be displayed in the backend
-		if(($view instanceof PayplanssiteViewInvoice && $task == 'confirm') || ($view instanceof PayplansadminViewInvoice && $task == 'edit'))
-		{
-			$foo = 'test';	
+			$tmpl = 'subscription_edit';
 			$itemId = $view->getModel()->getId();
 			$invoice = PayplansApi::getInvoice($itemId);
+			$subscription = PayplansSubscription::getInstance($itemId);
+			$invoiceId = $invoice->getId();
 			
-			$html = $this->renderBundleHtml($invoice);
+			$subscriptionApp  = new PayplansAppSubscriptiondetail();
+// 			return $subscriptionApp->renderWidget($subscription, $tmpl);
 			
-			$this->_assign('html', $html);
-			
-			return $this->_render($layout);
+// 			$db = JFactory::getDBO();
+
+// 			$query = $db->getQuery(true);
+
+// 			$query
+// 			->select(array('*'))
+// 			->from('#__bundle')
+// 			->where("invoice_id = 211");
+
+// 			$db->setQuery($query);
+// 			$results = $db->loadObjectList();
+
+			$this->_assign('test', 'success');
+			return $this->_render($tmpl);
+// 			return '<h1>testtttt</h1>';
 		}
 
-		//view of subscription invoice.
-		if (($view instanceof PayplanssiteViewPayment) && $task == 'pay')
+		if(($view instanceof PayplanssiteViewInvoice && $task == 'confirm') || ($view instanceof PayplansadminViewInvoice && $task == 'edit'))
 		{
-			
+			$tmpl  =  'orderconfirm';
+			$itemId = $view->getModel()->getId();
+			$invoice = PayplansApi::getInvoice($itemId);
+				
+			$payplans_js_src = PayplansHelperUtils::pathFS2URL(dirname(__FILE__).DS. 'bundle' . DS . 'app' . DS . 'bundle' . DS . 'bundle.js');
+				
+			$this->_assign('payplans_js_src', $payplans_js_src);
+			$this->_assign('invoice_id', $invoice->getId());
+				
+			return $this->_render($tmpl);
 		}
-		
+
 		return false;
 	}
 	/**
@@ -173,14 +176,14 @@ class plgPayplansBundle extends XiPlugin
 		->where("age = '$age'");
 
 		$db->setQuery($query);
-		
-		
+
+
 		try {
 			$result = $db->loadObjectList();
 		} catch (Exception $e) {
 			$invoice->setParam('Error', $e->getMessage(). " on line" . $e->getLine());
 		}
-		
+
 		//logic check fails
 		if (count($result) > 0){
 			$invoice->setParam('Error', "A record for that family member already exists.");
@@ -191,10 +194,10 @@ class plgPayplansBundle extends XiPlugin
 			$familyMember->dob = $dob;
 			$familyMember->sex = $sex;
 			$familyMember->age = $age;
-				
+
 			JFactory::getDBO()->insertObject('#__bundle', $familyMember);
 		}
-		
+
 		$numberOfChildren = $invoice->getParam('familyChildren');
 		$invoice->setParam('familyChildren', $numberOfChildren++);
 
@@ -203,7 +206,7 @@ class plgPayplansBundle extends XiPlugin
 
 
 	}
-	
+
 	/**
 	 * Adds Adult family members to the invoice object.
 	 *
@@ -238,8 +241,8 @@ class plgPayplansBundle extends XiPlugin
 
 		$db->setQuery($query);
 
-		
-		
+
+
 		try {
 			$result = $db->loadObjectList();
 		} catch (Exception $e) {
@@ -247,7 +250,7 @@ class plgPayplansBundle extends XiPlugin
 		}
 
 		if (count($result) > 0){
-			$invoice->setParam('Error', "A record for that family member already exists");	
+			$invoice->setParam('Error', "A record for that family member already exists");
 		} else {
 			$familyMember = new stdClass();
 			$familyMember->invoice_id = $invoiceId;
@@ -258,38 +261,14 @@ class plgPayplansBundle extends XiPlugin
 
 			JFactory::getDBO()->insertObject('#__bundle', $familyMember);
 		}
-		
+
 		$numberOfAdults = $invoice->getParam('familyAdults');
 		$invoice->setParam('familyAdults', $numberOfAdults++);
 
 		//update the invoice object
 		$invoice->refresh()->save();
 
-		
-	}
-	
-	public function renderBundleHtml($invoice, $appid = 0) {
-		
 
-		$payplans_js = "<script src='" . PayplansHelperUtils::pathFS2URL(dirname(__FILE__).DS. 'bundle' . DS . 'app' . DS . 'bundle' . DS . 'bundle.js') ."' type='text/javascript'></script>";
-		$html = $payplans_js . "
-					<div class ='pp-app-bundle'>
-					<h4> Additional Family Members </h4>
-					<button id='pp-custom-calculate' type='button'>add to total</button><br />
-					<button id='pp-custom-addFamily' type='button'>Add</button>
-					<button id='pp-custom-removeFamily' type='button'>Remove</button>
-					<button id='pp-custom-resetFamily' type='button'>Reset</button>
-					<div class='pp-app-bundle-inputs'>
-					<input type='hidden' name='invoiceId' value='". $invoice->getId() ."'/>
-					</div>
-					</div>
-							";
-		return $html;
-
-		//breaks the system as of right now
-// 		return array('pp-subscription-details' => $this->_render($layout));
-// 		$this->_render($layout);
 	}
-	
 
 }
