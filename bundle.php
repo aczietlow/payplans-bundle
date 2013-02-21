@@ -22,17 +22,19 @@ class plgPayplansBundle extends XiPlugin
 	 * @return boolean
 	 */
 	public function onPayplansSystemStart()
-	{	
+	{
 		$db = JFactory::getDbo();
 		$tables_list = $db->getTableList();
 			
 		$app = JFactory::getApplication();
 		$prefix = $app->getCfg('dbprefix');
-			
+		
+		$tables = array('z_test');
+// 		$db->getTableCreate($tables);
 		if (!in_array($prefix. 'bundle', $tables_list)) {
 			$db->getTableCreate($tables);
 		}
-		
+
 		//add bundle app path to app loader
 		$appPath = dirname(__FILE__).DS.'bundle'.DS.'app';
 		PayplansHelperApp::addAppsPath($appPath);
@@ -70,9 +72,9 @@ class plgPayplansBundle extends XiPlugin
 
 			$db = JFactory::getDBO();
 			$tables = $db->getTableList();
-			
-			
-			
+				
+				
+				
 			$query = $db->getQuery(true);
 
 			$query
@@ -82,22 +84,22 @@ class plgPayplansBundle extends XiPlugin
 
 			$db->setQuery($query);
 			$results = $db->loadObjectList();
-			
+				
 			return $subscriptionApp->renderWidget($results, $tmpl);
 		}
 
 		if(($view instanceof PayplanssiteViewInvoice && $task == 'confirm') || ($view instanceof PayplansadminViewInvoice && $task == 'edit'))
 		{
-			
+				
 			$tmpl  =  'orderconfirm';
 			$itemId = $view->getModel()->getId();
 			$invoice = PayplansApi::getInvoice($itemId);
-				
+
 			$payplans_js_src = PayplansHelperUtils::pathFS2URL(dirname(__FILE__).DS. 'bundle' . DS . 'app' . DS . 'bundle' . DS . 'bundle.js');
-				
+
 			$this->_assign('payplans_js_src', $payplans_js_src);
 			$this->_assign('invoice_id', $invoice->getId());
-				
+
 			return $this->_render($tmpl);
 		}
 
