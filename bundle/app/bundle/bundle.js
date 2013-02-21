@@ -86,64 +86,6 @@
 		//gets number of input fields already in the bundle field set
 		var i = payplans.jQuery('#.pp-app-bundle-inputs input').size();
 		
-		
-		payplans.jQuery('#pp-custom-calculate').click(function () {
-			var count = i-1; 			//subtract number of manually added input fields (hidden id field)
-			var invoiceId = payplans.jQuery('input[name="invoiceId"]').val(); //gets invoice_id
-			
-			var familyMembers = new Object(); //generic family member object
-			familyMembers.name = [];
-			familyMembers.dob = [];
-			familyMembers.sex = [];
-			familyMembers.age = [];
-			
-			var familyChildren = new Object(); //child member object (psuedo extends family member object)
-			familyChildren.name = [];
-			familyChildren.dob = [];
-			familyChildren.sex = [];
-			familyChildren.age = [];
-			
-			var familyAdults = new Object(); //Adult member object (psuedo extends family member object)
-			familyAdults.name = [];
-			familyAdults.dob = [];
-			familyAdults.sex = [];
-			familyAdults.age = [];
-			
-			
-			//populate familyMembers object
-			payplans.jQuery.each(payplans.jQuery('.fieldFamilyName'), function() {
-		        familyMembers.name.push(payplans.jQuery(this).val());
-		    });
-			payplans.jQuery.each(payplans.jQuery('.fieldFamilySex:checked'), function() {
-				familyMembers.sex.push(payplans.jQuery(this).val());
-			});
-			payplans.jQuery.each(payplans.jQuery('.fieldFamilyDOB'), function() {
-				familyMembers.dob.push(payplans.jQuery(this).val());
-				familyMembers.age.push(calcAge(payplans.jQuery(this).val()));
-			});
-			
-			
-			//polymorph members object to children or adults respectively
-			for (var j = 0; j < count; j++) {
-				if (familyMembers.age[j] < 18) {
-					familyChildren.name.push(familyMembers.name[j]);
-					familyChildren.sex.push(familyMembers.sex[j]);
-					familyChildren.dob.push(familyMembers.dob[j]);
-					familyChildren.age.push(familyMembers.age[j]);
-				}
-				else {
-					familyAdults.name.push(familyMembers.name[j]);
-					familyAdults.sex.push(familyMembers.sex[j]);
-					familyAdults.dob.push(familyMembers.dob[j]);
-					familyAdults.age.push(familyMembers.age[j]);
-				}
-			}
-			
-			//calls ajax triggers to php class
-			payplans.apps.bundle.addParams(invoiceId, familyChildren, familyAdults);
-//			payplans.apps.bundle.calculatePricing(invoiceId, count );
-		});
-		
 		//add 1 add family field set
 		payplans.jQuery('#pp-custom-addFamily').click(function() {
 			
@@ -269,7 +211,7 @@
 			//calls ajax triggers to php class
 //			setTimeout("payplans.apps.bundle.calculatePricing(invoiceId, count )", 2000);
 			
-			setTimeout("testcall()", 2000);
+			setTimeout("loadAjax(" + i + ")", 2000);
 //			setTimeout("testcall("+invoiceId+", "+familyChildren+", "+familyAdults+")", 5000);
 //			payplans.apps.bundle.calculatePricing(invoiceId, count );
 			
@@ -282,13 +224,14 @@
 	// Should be last line, write code above this line.
 })(payplans.jQuery);
 
-function testcall() {
+function loadAjax(i) {
 	//gets number of input fields already in the bundle field set
-	var i = payplans.jQuery('#.pp-app-bundle-inputs input').size();
-	
+	//var i = payplans.jQuery('#.pp-app-bundle-inputs input').size();
+
 	var count = i-1; 			//subtract number of manually added input fields (hidden id field)
+	//var i = payplans.jQuery('#.pp-app-bundle-inputs input').size();
 	var invoiceId = payplans.jQuery('input[name="invoiceId"]').val(); //gets invoice_id
-	
+	alert(count);
 	var familyMembers = new Object(); //generic family member object
 	familyMembers.name = [];
 	familyMembers.dob = [];
@@ -336,7 +279,6 @@ function testcall() {
 			familyAdults.age.push(familyMembers.age[j]);
 		}
 	}
-	
 	payplans.apps.bundle.addParams(invoiceId, familyChildren, familyAdults);
 }
 
