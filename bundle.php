@@ -4,9 +4,9 @@
  * @copyright	Copyright (C) 2009 - 2009 Ready Bytes Software Labs Pvt. Ltd. All rights reserved.
  * @license		GNU/GPL, see LICENSE.php
  * @package		Payplans
- * @subpackage	Discount
- * @contact		shyam@joomlaxi.com
+ * @contact		chris.zietlow@morris.com
  */
+
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
@@ -22,7 +22,17 @@ class plgPayplansBundle extends XiPlugin
 	 * @return boolean
 	 */
 	public function onPayplansSystemStart()
-	{
+	{	
+		$db = JFactory::getDbo();
+		$tables_list = $db->getTableList();
+			
+		$app = JFactory::getApplication();
+		$prefix = $app->getCfg('dbprefix');
+			
+		if (!in_array($prefix. 'bundle', $tables_list)) {
+			$db->getTableCreate($tables);
+		}
+		
 		//add bundle app path to app loader
 		$appPath = dirname(__FILE__).DS.'bundle'.DS.'app';
 		PayplansHelperApp::addAppsPath($appPath);
@@ -59,7 +69,10 @@ class plgPayplansBundle extends XiPlugin
 			$subscriptionApp  = new PayplansAppBundle();
 
 			$db = JFactory::getDBO();
-
+			$tables = $db->getTableList();
+			
+			
+			
 			$query = $db->getQuery(true);
 
 			$query
@@ -75,6 +88,7 @@ class plgPayplansBundle extends XiPlugin
 
 		if(($view instanceof PayplanssiteViewInvoice && $task == 'confirm') || ($view instanceof PayplansadminViewInvoice && $task == 'edit'))
 		{
+			
 			$tmpl  =  'orderconfirm';
 			$itemId = $view->getModel()->getId();
 			$invoice = PayplansApi::getInvoice($itemId);

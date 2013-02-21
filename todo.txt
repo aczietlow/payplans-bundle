@@ -1,9 +1,5 @@
 week of 2-11
-add family members to subscription plan view
-add family members to subscription plan admin view
 change trigger to submit button
-style form
-add user input field to $$ amount for each instance of app.
 create db on App installation
 add form validation (javascript)
 
@@ -13,3 +9,7 @@ add form validation (javascript)
 #check db for duplicate records
 #use jquery ui date picker instead of manually creating date fields
 #replace u18 property witha age
+#add user input field to $$ amount for each instance of app.
+#style form
+#add family members to subscription plan view
+#add family members to subscription plan admin view
